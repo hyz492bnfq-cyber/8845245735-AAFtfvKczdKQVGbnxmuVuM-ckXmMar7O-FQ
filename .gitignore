@@ -1,6 +1,9 @@
-node_modules/
 .env
-*.log
-.backups/
-.tmp_sandbox/
-.DS_Store
+.env.*
+!.env.example
+node_modules/
+data.json
+data.json.bak
+data.json.before-restore.json
+logs/
+workspace/candidates/

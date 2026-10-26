@@ -1,71 +1,924 @@
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M2 HACOO BOT V6.3.1 - Dashboard</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 20px; }
-        .container { max-width: 1000px; margin: 0 auto; }
-        header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 15px; }
-        h1 { margin: 0; color: #38bdf8; font-size: 24px; }
-        .badge { background: #0284c7; padding: 4px 10px; border-radius: 12px; font-size: 14px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
-        .card { background: #1e293b; border-radius: 8px; padding: 20px; border: 1px solid #334155; }
-        .card h2 { margin-top: 0; font-size: 18px; color: #94a3b8; }
-        .metric { font-size: 32px; font-weight: bold; color: #f1f5f9; margin: 10px 0; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { text-align: left; padding: 8px; border-bottom: 1px solid #334155; }
-        th { color: #94a3b8; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M2 HACOO BOT</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1020;--panel:#121a2c;--panel2:#19243a;--line:#29364e;--text:#edf2ff;--muted:#93a3bd;--blue:#6488ff;--green:#39d6a0;--red:#ff7385;--radius:16px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.layout{display:grid;grid-template-columns:230px minmax(0,1fr);min-height:100vh}
+aside{padding:24px 15px;border-right:1px solid var(--line);background:#0e1526}
+.brand{display:flex;align-items:center;gap:12px;padding:4px 8px 25px}
+.logo{width:43px;height:43px;display:grid;place-items:center;background:linear-gradient(135deg,#6589ff,#8c64f7);border-radius:14px;font-size:23px}
+.brand strong{display:block;font-size:16px}.brand small{color:var(--muted)}
+.navtitle{font-size:10px;letter-spacing:1.5px;color:var(--muted);padding:13px 10px 7px}
+nav button{width:100%;border:0;background:transparent;color:var(--muted);text-align:left;padding:11px 12px;border-radius:10px;margin:2px 0;display:flex;gap:10px;align-items:center}
+nav button:hover,nav button.active{background:#202d49;color:white}
+main{padding:30px;max-width:1250px;width:100%;margin:auto}
+.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:25px}
+h1{font-size:27px;letter-spacing:-.7px;margin:0}h2{font-size:17px;margin:0 0 6px}h3{font-size:14px;margin:0}
+p{color:var(--muted);margin:4px 0 0}.sub{color:var(--muted);font-size:13px}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;background:var(--panel2);border-radius:20px;font-size:12px}
+.dot{width:8px;height:8px;background:var(--green);border-radius:50%}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-bottom:18px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px;min-width:0}
+.metric{font-size:29px;font-weight:750;margin-top:10px;letter-spacing:-1px}
+.metric-label{font-size:13px;color:var(--muted)}
+.section{margin-bottom:17px}
+.sectionhead{margin-bottom:17px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.setting{padding:15px 0;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:18px}
+.setting:last-child{border-bottom:0;padding-bottom:0}
+.setting:first-child{padding-top:0}
+.setting p{font-size:12px;max-width:520px}
+.switch{position:relative;flex-shrink:0;width:46px;height:27px;background:#354158;border:0;border-radius:30px;padding:3px;transition:.2s}
+.switch:after{content:"";display:block;width:21px;height:21px;border-radius:50%;background:white;transition:.2s}
+.switch.on{background:#367be9}.switch.on:after{transform:translateX(19px)}
+select,input[type=text],input[type=password],input[type=number]{background:#0d1527;color:var(--text);border:1px solid var(--line);padding:11px 12px;border-radius:10px;width:100%;min-width:0;outline:none}
+select:focus,input:focus{border-color:var(--blue)}
+.field{display:grid;gap:7px;min-width:0}.field label{font-size:13px;color:#c6d1e5}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:10px 14px;border-radius:10px;font-weight:600}
+.btn:hover{filter:brightness(1.15)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:white}
+.btn.danger{color:#ff9aaa;border-color:#6e3443}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}
+.notice{padding:13px 15px;background:#152746;border:1px solid #2d4a78;border-radius:12px;color:#cbdcff;font-size:13px;margin-bottom:18px}
+.notice.warn{background:#342518;border-color:#71502c;color:#ffdfae}
+.hidden{display:none!important}
+.page{display:none}.page.active{display:block}
+.list{display:grid;gap:9px;margin-top:15px}
+.rule{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#0e1628;border:1px solid var(--line);border-radius:10px;padding:10px 12px;overflow-wrap:anywhere}
+.rule span{min-width:0;overflow-wrap:anywhere}
+.empty{text-align:center;color:var(--muted);padding:30px 10px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:12px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+.tag{display:inline-block;border-radius:7px;background:#25324a;padding:4px 7px;font-size:11px}
+footer{color:var(--muted);font-size:11px;padding:20px 0}
+.toast{position:fixed;bottom:20px;right:20px;max-width:calc(100% - 40px);background:#20334a;border:1px solid #405979;padding:14px 18px;border-radius:12px;z-index:10;box-shadow:0 10px 40px #0006}
+
+.bigpause{width:100%;min-height:58px;padding:16px;border:0;border-radius:16px;font-size:18px;font-weight:700;color:#fff;margin-bottom:16px}
+.bigpause.stop{background:#c98a1b}.bigpause.go{background:#1f9d73}.bigpause.off{background:#354158;color:var(--muted)}
+.hcard{display:grid;gap:6px;background:#0e1628;border:1px solid var(--line);border-radius:12px;padding:13px;overflow-wrap:anywhere}
+.hcard .btn{justify-self:start;min-height:44px}
+.tag.failed{background:#5a2330}
+.chart{display:flex;align-items:flex-end;gap:8px;height:130px;margin-top:14px}
+.bar{flex:1;display:grid;gap:4px;text-align:center;font-size:11px;color:var(--muted)}
+.cols{height:105px;display:flex;align-items:flex-end;justify-content:center;gap:3px}
+.cols i{display:block;width:45%;max-width:18px;min-height:2px;background:var(--blue);border-radius:4px 4px 0 0}.cols i.b2{background:#9a74ff}
+.saveSettings,#saveHome{display:none}
+.switch{width:54px;height:32px}.switch:after{width:26px;height:26px}.switch.on:after{transform:translateX(22px)}
+
+
+
+/* V6 — espace IA autonome clarifié */
+.v6-autonomy-wrap{margin-top:16px;padding:20px;border:1px solid var(--border,#263248);border-radius:18px;background:linear-gradient(145deg,rgba(25,38,61,.78),rgba(12,20,34,.9))}
+.v6-autonomy-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+.v6-autonomy-heading h3{margin:0 0 8px;font-size:1.18rem}
+.v6-autonomy-heading p,.v6-info-card p,.v6-subsection p{color:var(--muted,#9aa9bf);line-height:1.55;margin:0}
+.v6-autonomy-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
+.v6-info-card{padding:16px;border:1px solid var(--border,#263248);border-radius:14px;background:rgba(8,15,27,.72);min-width:0}
+.v6-info-card h4{margin:8px 0;font-size:1rem}
+.v6-info-card p{font-size:.92rem;margin-bottom:12px}
+.v6-info-card small{display:block;color:var(--muted,#9aa9bf);line-height:1.5;overflow-wrap:anywhere}
+.v6-info-kicker{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent,#9bbcff);font-weight:700}
+.v6-info-card code{font-size:.85em;overflow-wrap:anywhere}
+.v6-safety-card{border-color:rgba(83,174,142,.42)}
+.v6-subsection{margin:22px 0 10px}
+.v6-subsection h4{margin:0 0 6px}
+.v6-subsection p{font-size:.9rem}
+@media(max-width:720px){.v6-autonomy-wrap{padding:14px}.v6-autonomy-heading{display:block}.v6-autonomy-heading .btn{margin-top:14px;width:100%}.v6-autonomy-grid{grid-template-columns:1fr}}
+
+
+/* V6.2.1 — refonte mobile-first, sans modifier les fonctions métier */
+:root{--bg:#080d19;--panel:#101a2b;--panel2:#18263d;--line:#293a55;--text:#f2f6ff;--muted:#9aabc4;--blue:#6d91ff;--green:#41d7a2;--radius:18px}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{min-width:320px;overscroll-behavior-y:contain}
+button,input,select,textarea{font:inherit}
+button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.layout{grid-template-columns:252px minmax(0,1fr)}
+aside{position:sticky;top:0;height:100dvh;overflow-y:auto;padding:22px 14px;background:linear-gradient(180deg,#101a2c,#0c1322);border-right:1px solid var(--line)}
+.brand{padding:5px 8px 24px}.logo{box-shadow:0 8px 24px #6589ff33}
+.navtitle{padding:16px 12px 8px;font-weight:750}
+nav button{min-height:44px;border:1px solid transparent;transition:background .16s ease,color .16s ease,border-color .16s ease}
+nav button.active{background:#233454;border-color:#344a70;color:#fff;box-shadow:inset 3px 0 0 var(--blue)}
+main{max-width:1440px;padding:30px clamp(18px,3vw,42px) 42px}
+.top{position:relative;align-items:center;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid #1d2a40}
+h1{font-size:clamp(24px,2vw,32px);line-height:1.2}.top p{max-width:680px;margin-top:8px}
+.pill{white-space:nowrap;border:1px solid var(--line);padding:8px 12px}
+.card{box-shadow:0 8px 28px #00000012;transition:border-color .18s ease}.card h2{line-height:1.35}.sectionhead{margin-bottom:20px}
+.grid{gap:14px}.metric{font-variant-numeric:tabular-nums}.metric-label{line-height:1.4}
+.btn{min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:7px;line-height:1.25;text-align:center;text-decoration:none;touch-action:manipulation}
+.actions{align-items:stretch}.actions .btn{max-width:100%}
+.setting{align-items:center}.setting>div{min-width:0}.setting h3{line-height:1.4}.setting p{line-height:1.5}
+.field label{line-height:1.4}.field input,.field select,.field textarea{min-height:46px}textarea{max-width:100%;resize:vertical}
+.tablewrap{max-width:100%;overscroll-behavior-x:contain}.tablewrap table{min-width:560px}
+#mobileMoreButton{display:none}
+.mobile-menu-backdrop{position:fixed;inset:0;z-index:40;background:#020611b8;backdrop-filter:blur(5px);display:none;align-items:flex-end}
+.mobile-menu-backdrop.open{display:flex}
+.mobile-menu-sheet{width:100%;max-height:min(78dvh,680px);overflow:auto;background:#101a2b;border:1px solid var(--line);border-bottom:0;border-radius:22px 22px 0 0;padding:10px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -18px 60px #0006}
+.mobile-menu-grabber{width:42px;height:4px;border-radius:8px;background:#53647f;margin:2px auto 16px}
+.mobile-menu-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}.mobile-menu-head h2{margin:0}
+.mobile-menu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.mobile-menu-grid button{display:flex;align-items:center;gap:10px;text-align:left;min-height:58px;padding:12px;background:#152239;border:1px solid #2a3b56;border-radius:13px;color:var(--text)}
+.mobile-menu-grid button i{font-style:normal;font-size:20px;width:25px;text-align:center}
+.mobile-menu-grid button.active{border-color:var(--blue);background:#213355}
+@media(min-width:801px){.mobile-menu-backdrop{display:none!important}}
+@media(max-width:800px){
+ .layout{display:block;min-height:100dvh}aside{position:relative;height:auto;overflow:visible;padding:10px 16px 0;border-right:0;border-bottom:1px solid var(--line)}
+ .brand{padding:2px 0 10px;gap:10px}.logo{width:38px;height:38px;border-radius:12px;font-size:20px}.brand strong{font-size:15px}.brand small{font-size:12px}.navtitle{display:none}
+ nav{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;justify-content:space-around;gap:3px;overflow:visible;background:#0d1525f5;border-top:1px solid #30415d;padding:7px 5px calc(7px + env(safe-area-inset-bottom));backdrop-filter:blur(18px)}
+ nav button{width:auto;min-width:0;flex:1;min-height:56px;margin:0;padding:6px 2px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center;font-size:10px;line-height:1.1;white-space:normal}
+ nav button[data-page="cleaning"],nav button[data-page="content"],nav button[data-page="rules"],nav button[data-page="assistant"],nav button[data-page="settings"]{display:none}
+ nav button.active{box-shadow:inset 0 2px 0 var(--blue);border-color:transparent;background:#1c2c48}
+ nav button i{font-style:normal;font-size:19px;line-height:1.1}nav>a[href="/dashboard/autonomie"]{flex:1;min-width:0;min-height:56px!important;padding:6px 2px!important;margin:0!important;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;line-height:1.1;text-align:center;border-radius:12px}nav>a[href="/dashboard/autonomie"] i{font-size:19px;line-height:1.1}#mobileMoreButton{display:flex}
+ main{padding:16px 13px calc(108px + env(safe-area-inset-bottom));}
+ .top{display:flex;align-items:flex-start;flex-direction:row;gap:10px;margin-bottom:16px;padding-bottom:14px}.top>div:first-child{min-width:0}.top h1{font-size:23px;letter-spacing:-.45px}.top p{font-size:13px;line-height:1.4;margin-top:6px}.pill{font-size:10px;padding:7px 8px;gap:5px;max-width:130px;white-space:normal;line-height:1.2}.dot{width:7px;height:7px;flex-shrink:0}
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-bottom:12px}.card{padding:15px;border-radius:16px}.metric{font-size:25px;margin-top:7px}.metric-label{font-size:12px}
+ .section{margin-bottom:12px}.sectionhead{margin-bottom:15px}.sectionhead p,.card>p{font-size:13px;line-height:1.5}
+ .formgrid{grid-template-columns:1fr;gap:13px}.formgrid [style*="grid-column"]{grid-column:auto!important}
+ .setting{gap:12px;padding:14px 0}.setting h3{font-size:13px}.setting p{font-size:12px;max-width:none}
+ .actions{display:grid;grid-template-columns:1fr;gap:8px;margin-top:14px}.actions .btn{width:100%;min-height:46px}
+ .row{align-items:flex-start;gap:10px}.row>.btn{flex-shrink:0}
+ .bigpause{min-height:54px;margin-bottom:12px;border-radius:14px;font-size:16px}
+ .chart{gap:4px}.bar{font-size:10px}.cols{gap:2px}
+ .v6-autonomy-wrap{padding:13px}.v6-autonomy-grid{grid-template-columns:1fr}.v6-info-card{padding:14px}
+ .tablewrap{margin-right:-3px}.tablewrap table{min-width:560px}
+ .toast{left:12px;right:12px;bottom:calc(83px + env(safe-area-inset-bottom));max-width:none}
+ footer{padding:18px 0 4px}
+}
+@media(max-width:390px){main{padding-left:10px;padding-right:10px}.top h1{font-size:21px}.pill{max-width:112px}.card{padding:12px}.metric{font-size:23px}.mobile-menu-grid{grid-template-columns:1fr}nav button{font-size:9px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
+
+
+/* Refonte visuelle : hiérarchie plus claire, navigation lisible et ergonomie mobile renforcée. */
+:root{--bg:#070b14;--panel:#101827;--panel2:#17243a;--line:#283850;--text:#f4f7ff;--muted:#a0aec4;--blue:#7897ff;--green:#4adeb1;--red:#ff7e90;--radius:20px}
+body{background:radial-gradient(1000px 480px at 78% -160px,#1d2e51 0%,transparent 70%),var(--bg);letter-spacing:.005em}
+.layout{grid-template-columns:264px minmax(0,1fr)}
+aside{background:rgba(12,19,32,.96);border-right-color:#223149;padding:22px 13px}
+.brand{padding:4px 9px 22px}.logo{background:linear-gradient(145deg,#7798ff,#8869f7);box-shadow:0 9px 28px #6488ff38}
+nav button{font-size:13px;font-weight:600;min-height:46px;border:1px solid transparent}
+nav button.active{background:linear-gradient(100deg,#26395c,#1a2941);border-color:#3b5278;box-shadow:inset 3px 0 0 var(--blue)}
+main{max-width:1500px;padding:clamp(16px,3vw,42px)}
+.top{padding:0 0 20px;border-bottom:1px solid #223149;margin-bottom:22px}
+.card{background:linear-gradient(145deg,rgba(17,27,44,.98),rgba(13,21,35,.98));border-color:#293a54;box-shadow:0 12px 35px #0000001a}
+.grid .card{position:relative;overflow:hidden}.grid .card:after{content:"";position:absolute;right:-28px;top:-35px;width:86px;height:86px;border-radius:50%;background:#7897ff0c;pointer-events:none}
+.metric{font-size:clamp(24px,2.4vw,32px)}
+.sectionhead h2{font-size:18px;letter-spacing:-.25px}.sectionhead p{max-width:72ch;line-height:1.55}
+.notice{line-height:1.55}.field label{font-weight:650}.setting{gap:18px}.setting>div{min-width:0}.setting h3{font-size:14px}
+.btn{transition:transform .15s ease,filter .15s ease,border-color .15s ease}.btn:hover{transform:translateY(-1px)}
+.mobile-autonomy-link{display:flex;align-items:center;gap:12px;min-height:58px;padding:12px;background:linear-gradient(120deg,#202f50,#17243a);border:1px solid #3b5278;border-radius:13px;color:var(--text);text-decoration:none}.mobile-autonomy-link i{font-style:normal;font-size:22px}.mobile-autonomy-link span{display:grid;gap:2px}.mobile-autonomy-link small{font-size:12px;color:var(--muted)}
+@media(max-width:800px){
+ .layout{display:block}.brand{padding:2px 0 12px}.brand strong{font-size:15px}.brand small{font-size:12px}
+ main{padding:15px 12px calc(110px + env(safe-area-inset-bottom))}.top{gap:12px;padding-bottom:14px;margin-bottom:14px}
+ .grid .card{min-height:104px}.card{box-shadow:0 6px 18px #00000012}
+ .setting{padding:16px 0}.setting p{line-height:1.5}.switch{width:54px;height:32px;min-width:54px}.switch:after{width:26px;height:26px}
+ .actions .btn{min-height:48px}.mobile-menu-sheet{padding-left:14px;padding-right:14px}.mobile-menu-grid button{min-width:0;overflow-wrap:anywhere}
+}
+@media(max-width:390px){.grid{gap:8px}.grid .card{min-height:98px}.metric{font-size:22px}.metric-label{font-size:11px}.top h1{font-size:20px}}
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>M2 HACOO BOT Dashboard</h1>
-            <span class="badge" id="version">v6.3.2</span>
-        </header>
-        <div class="grid">
-            <div class="card">
-                <h2>Statut Système</h2>
-                <div class="metric" id="status">En ligne</div>
-            </div>
-            <div class="card">
-                <h2>Tâches Autonomes</h2>
-                <div class="metric" id="task-count">0</div>
-            </div>
-            <div class="card">
-                <h2>Tokens IA Consommés</h2>
-                <div class="metric" id="quota-used">0</div>
-            </div>
-        </div>
-        <div class="card" style="margin-top: 20px;">
-            <h2>File de Développement Autonome</h2>
-            <table>
-                <thead>
-                    <tr><th>ID</th><th>Titre</th><th>Priorité</th><th>Statut</th></tr>
-                </thead>
-                <tbody id="task-table">
-                    <tr><td colspan="4">Aucune tâche enregistrée</td></tr>
-                </tbody>
-            </table>
-        </div>
+<div class="layout">
+<aside>
+  <div class="brand"><div class="logo">🛡️</div><div><strong>M2 HACOO BOT</strong><small>Centre de contrôle</small></div></div>
+  <div class="navtitle">MENU PRINCIPAL</div>
+  <nav id="nav">
+    <button class="active" data-page="home"><i>◫</i><span>Accueil</span></button>
+    <button data-page="duplicates"><i>⧉</i><span>Doublons</span></button>
+    <button data-page="moderation"><i>⛨</i><span>Modération</span></button>
+    <button data-page="cleaning"><i>✦</i><span>Nettoyage</span></button>
+    <button data-page="content"><i>▧</i><span>Contenus</span></button>
+    <button data-page="rules"><i>☷</i><span>Règles</span></button>
+    <button data-page="history"><i>◷</i><span>Historique</span></button>
+    <button data-page="assistant"><i>✧</i><span>Assistant IA</span></button>
+    <a href="/dashboard/autonomie" aria-label="Ouvrir le nouveau dashboard autonome" style="display:flex;gap:10px;align-items:center;padding:11px 12px;margin:2px 0;border-radius:10px;color:var(--muted);text-decoration:none"><i>⚡</i><span>Autonomie V6</span></a>
+    <button data-page="settings"><i>⚙</i><span>Réglages</span></button>
+    <button id="mobileMoreButton" type="button" aria-haspopup="dialog" aria-expanded="false"><i>☰</i><span>Plus</span></button>
+  </nav>
+</aside>
+<main>
+  <div class="top">
+    <div><h1 id="pageTitle">Vue d’ensemble</h1><p id="pageDesc">Tout ce qui se passe sur ton canal, en un coup d’œil.</p></div>
+    <div class="pill"><span class="dot" id="statusDot"></span><span id="statusText">Connexion en cours…</span></div>
+  </div>
+  <div id="notice" class="notice hidden"></div>
+
+  <section class="page active" id="home">
+    <button id="pauseBtn" class="bigpause stop">Chargement…</button>
+    <div class="grid">
+      <div class="card"><div class="metric-label">Messages analysés</div><div class="metric" id="mSeen">—</div></div>
+      <div class="card"><div class="metric-label">Doublons détectés</div><div class="metric" id="mDup">—</div></div>
+      <div class="card"><div class="metric-label">Publications supprimées</div><div class="metric" id="mDeleted">—</div></div>
+      <div class="card"><div class="metric-label">Actions de modération</div><div class="metric" id="mModeration">—</div></div>
+      <div class="card"><div class="metric-label">Messages nettoyés</div><div class="metric" id="mCleaned">—</div></div>
+      <div class="card"><div class="metric-label">Erreurs</div><div class="metric" id="mErrors">—</div></div>
     </div>
-    <script>
-        async function fetchStatus() {
-            try {
-                const res = await fetch('/api/status');
-                const data = await res.json();
-                document.getElementById('version').innerText = 'v' + data.version;
-                document.getElementById('status').innerText = data.status.toUpperCase();
-                document.getElementById('task-count').innerText = data.tasks.length;
-                document.getElementById('quota-used').innerText = (data.quota ? data.quota.usedToday : 0) + ' / ' + (data.quota ? data.quota.dailyBudget : 100000);
-            } catch (e) {
-                document.getElementById('status').innerText = 'OFFLINE';
-            }
-        }
-        fetchStatus();
-        setInterval(fetchStatus, 10000);
-    </script>
+    <div class="card section">
+      <div class="sectionhead"><h2>Contrôle rapide</h2><p>Active ou mets en pause le bot.</p></div>
+      <div class="setting"><div><h3>Bot activé</h3><p>Le bot analyse les nouvelles publications du canal.</p></div><button class="switch" data-setting="enabled" role="switch" aria-label="Activer le bot"></button></div>
+      <div class="setting"><div><h3>Pause de sécurité</h3><p>Mettre le bot en pause si nécessaire.</p></div><button class="switch" data-setting="botPaused" role="switch" aria-label="Pause du bot"></button></div>
+      <div class="actions"><button class="btn primary" id="saveHome">Enregistrer les changements</button><button class="btn" id="refresh">Actualiser les données</button></div>
+    </div>
+    <div class="card section">
+      <div class="sectionhead"><h2>Fiabilité et reprise</h2><p>Les tâches en attente sont sauvegardées pour être reprises après une erreur ou un redémarrage.</p></div>
+      <div id="queueStatus" class="notice">Vérification de la file d’attente…</div>
+      <div class="actions"><button class="btn primary" id="retryPending">Relancer les tâches en attente</button></div>
+      <div id="uncertainAlbumPanel" class="notice warn hidden" style="margin-top:12px">
+        <strong>Album à vérifier manuellement.</strong> Consulte le canal Telegram avant de choisir une action.
+        <div class="actions" style="margin-top:10px"><button class="btn" id="albumConfirmSent">J’ai vérifié : tout l’album est publié</button><button class="btn" id="albumConfirmNotSent">J’ai vérifié : le morceau en attente n’est pas publié</button></div>
+      </div>
+    </div>
+    <div class="card section"><h2>7 derniers jours</h2><p><span style="color:var(--blue)">■</span> Supprimées &nbsp; <span style="color:#9a74ff">■</span> Doublons</p><div id="chart" class="chart"></div></div>
+    <div class="card"><h2>Activité récente</h2><p>Les dernières actions du bot.</p><div id="recent" class="list"><div class="empty">Chargement…</div></div></div>
+  </section>
+
+  <section class="page" id="duplicates">
+    <div class="card section">
+      <div class="sectionhead"><h2>Détection des doublons</h2><p>Évite qu’une même publication soit envoyée plusieurs fois.</p></div>
+      <div class="notice" id="geminiStatus">État de Gemini : vérification… Gemini analyse chaque nouvelle publication et compare l’historique récent. En cas de doute ou d’erreur API, la publication est conservée.</div>
+      <div class="setting"><div><h3>Activer l’anti-doublons</h3><p>Contrôle les publications répétées.</p></div><button class="switch" data-setting="duplicates" role="switch"></button></div>
+      <div class="formgrid" style="margin-top:20px">
+        <div class="field"><label for="windowMinutes">Durée de comparaison</label><select id="windowMinutes"><option value="1">1 minute</option><option value="5">5 minutes</option><option value="15">15 minutes</option><option value="30">30 minutes</option><option value="60">1 heure</option><option value="180">3 heures</option><option value="360">6 heures</option></select></div>
+        <div class="field"><label for="duplicateMode">Méthode de détection</label><select id="duplicateMode"><option value="exact">Texte identique</option><option value="similar">Texte similaire</option></select></div>
+      </div>
+      <div class="setting" style="margin-top:18px"><div><h3>Seuil de ressemblance</h3><p>Plus le seuil est élevé, plus les textes doivent se ressembler.</p></div><strong id="thresholdLabel">72 %</strong></div>
+      <input type="range" id="similarityThreshold" min="40" max="95" value="72" style="width:100%;accent-color:var(--blue)">
+      <div class="setting"><div><h3>Détecter les textes similaires</h3><p>Repère les messages reformulés.</p></div><button class="switch" data-setting="detectSimilarText" role="switch"></button></div>
+      <div class="setting"><div><h3>Comparer aussi les liens</h3><p>Deux publications au texte identique mais avec des liens différents ne sont pas des doublons.</p></div><button class="switch" data-setting="compareLinks" role="switch"></button></div>
+      <div class="setting"><div><h3>Comparer les images</h3><p>Recherche les photos identiques ou modifiées.</p></div><button class="switch" data-setting="duplicateImages" role="switch"></button></div>
+      <div class="setting"><div><h3>Détecter les images modifiées</h3><p>Compare visuellement les images quand le traitement est disponible.</p></div><button class="switch" data-setting="detectModifiedImages" role="switch"></button></div>
+      <div class="setting"><div><h3>Comparer les albums</h3><p>Repère les albums de photos déjà publiés.</p></div><button class="switch" data-setting="duplicateAlbums" role="switch"></button></div>
+      <div class="actions"><button class="btn primary saveSettings">Enregistrer les modifications</button></div>
+    </div>
+  </section>
+
+  <section class="page" id="moderation">
+    <div class="card">
+      <div class="sectionhead"><h2>Règles de modération</h2><p>Active uniquement les règles dont tu as besoin. Une règle déclenchée peut entraîner la suppression de la publication.</p></div>
+      <div class="setting"><div><h3>Hashtags interdits</h3><p>Supprime les publications contenant des hashtags.</p></div><button class="switch" data-setting="hashtags" role="switch"></button></div>
+      <div class="setting"><div><h3>Lignes commençant par un tiret</h3><p>Bloque les lignes du type « - exemple ».</p></div><button class="switch" data-setting="dashLines" role="switch"></button></div>
+      <div class="setting"><div><h3>Liens interdits</h3><p>Bloque les liens, sauf les domaines autorisés.</p></div><button class="switch" data-setting="blockLinks" role="switch"></button></div>
+      <div class="setting"><div><h3>Mentions interdites</h3><p>Bloque les mentions de comptes comme @compte.</p></div><button class="switch" data-setting="blockMentions" role="switch"></button></div>
+      <div class="setting"><div><h3>Messages transférés interdits</h3><p>Bloque les publications transférées détectées par Telegram.</p></div><button class="switch" data-setting="blockForwarded" role="switch"></button></div>
+      <div class="actions"><button class="btn primary saveSettings">Enregistrer les modifications</button></div>
+    </div>
+  </section>
+
+  <section class="page" id="cleaning">
+    <div class="card">
+      <div class="sectionhead"><h2>Nettoyage automatique</h2><p>Nettoie le texte ou la légende sans supprimer toute la publication.</p></div>
+      <div class="setting"><div><h3>Retirer les hashtags</h3><p>Enlève les hashtags du texte.</p></div><button class="switch" data-setting="cleanHashtags" role="switch"></button></div>
+      <div class="setting"><div><h3>Retirer les liens</h3><p>Enlève les URL du texte.</p></div><button class="switch" data-setting="cleanLinks" role="switch"></button></div>
+      <div class="setting"><div><h3>Retirer les mentions</h3><p>Enlève les mentions de comptes.</p></div><button class="switch" data-setting="cleanMentions" role="switch"></button></div>
+      <div class="setting"><div><h3>Retirer les emojis</h3><p>Enlève les emojis du texte et des légendes.</p></div><button class="switch" data-setting="cleanEmojis" role="switch"></button></div>
+      <div class="setting"><div><h3>Nettoyer les lignes vides</h3><p>Supprime les lignes vides inutiles.</p></div><button class="switch" data-setting="cleanEmptyLines" role="switch"></button></div>
+      <div class="actions"><button class="btn primary saveSettings">Enregistrer les modifications</button></div>
+    </div>
+  </section>
+
+  <section class="page" id="content">
+    <div class="card">
+      <div class="sectionhead"><h2>Types de publications</h2><p>Choisis les contenus que le bot accepte. Désactiver un type peut entraîner la suppression des publications correspondantes.</p></div>
+      <div class="setting"><div><h3>Messages texte</h3><p>Publications uniquement textuelles.</p></div><button class="switch" data-setting="allowText" role="switch"></button></div>
+      <div class="setting"><div><h3>Photos</h3><p>Images et albums de photos.</p></div><button class="switch" data-setting="allowPhotos" role="switch"></button></div>
+      <div class="setting"><div><h3>Vidéos</h3><p>Vidéos et animations.</p></div><button class="switch" data-setting="allowVideos" role="switch"></button></div>
+      <div class="setting"><div><h3>Documents</h3><p>Fichiers publiés dans le canal.</p></div><button class="switch" data-setting="allowDocuments" role="switch"></button></div>
+      <div class="setting"><div><h3>Regrouper les photos en album</h3><p>Si des photos sans texte arrivent dans la minute après une publication avec photo et texte, le bot les regroupe en un album. Tu peux modifier le texte pendant cette minute : la dernière version sera utilisée. L’original n’est supprimé qu’après la création de l’album.</p></div><button class="switch" data-setting="groupPhotos" role="switch"></button></div>
+      <div class="actions"><button class="btn primary saveSettings">Enregistrer les modifications</button></div>
+    </div>
+  </section>
+
+  <section class="page" id="rules">
+    <div class="card section">
+      <div class="sectionhead"><h2>Règles personnalisées</h2><p>Ajoute des mots, expressions ou domaines à bloquer ou autoriser.</p></div>
+      <div class="field"><label for="ruleList">Type de règle</label><select id="ruleList"><option value="bannedWords">Mots interdits</option><option value="blockedPhrases">Expressions interdites</option><option value="blockedDomains">Domaines interdits</option><option value="allowedDomains">Domaines autorisés</option></select></div>
+      <div class="field" style="margin-top:14px"><label for="ruleValue">Nouvelle règle</label><input id="ruleValue" type="text" maxlength="200" placeholder="Ex. exemple.com ou mot interdit"></div>
+      <div class="actions"><button class="btn primary" id="addRule">Ajouter la règle</button></div>
+    </div>
+    <div class="card"><div class="row"><h2>Règles enregistrées</h2><button class="btn" id="reloadRules">Actualiser</button></div><div id="rulesList" class="list"><div class="empty">Chargement…</div></div></div>
+  </section>
+
+  <section class="page" id="history">
+    <div class="card">
+      <div class="row"><div><h2>Historique des actions</h2><p>Publications supprimées, erreurs et albums regroupés.</p></div><button class="btn" id="reloadHistory">Actualiser</button></div>
+      <div class="formgrid" style="margin-top:18px">
+        <div class="field"><label for="historyFilter">Filtrer les actions</label><select id="historyFilter"><option value="all">Toutes les actions</option><option value="deleted">Supprimées</option><option value="failed">Échecs / erreurs</option><option value="regrouped">Albums regroupés</option></select></div>
+        <div class="field"><label for="historySearch">Rechercher un contenu</label><input id="historySearch" type="text" placeholder="Mot ou extrait…"></div>
+      </div>
+      <div id="historyRows" class="list"></div>
+      <div id="historyEmpty" class="empty hidden">Aucune action correspondante.</div>
+      <div class="actions"><button class="btn danger" id="clearHistory">Effacer l’historique</button></div>
+    </div>
+    <div class="card section" style="margin-top:16px"><h2>Historique des doublons</h2><div id="duplicateRows" class="list"></div></div><div class="card section" style="margin-top:16px"><h2>Journal IA et quotas</h2><p class="sub">Modèles utilisés, bascules et indisponibilités récentes.</p><div id="aiRows" class="list"></div></div>
+  </section>
+
+  <section class="page" id="assistant">
+    <div class="card section">
+      <div class="sectionhead"><h2>Assistant IA de configuration</h2><p>Explique ce que tu veux en français. L’IA prépare une proposition ; rien n’est appliqué avant que tu confirmes.</p></div>
+      <div class="notice" id="assistantKeyNotice">Cet assistant utilise la même variable GEMINI_API_KEY que l’anti-doublons. Aucune seconde clé n’est nécessaire.</div>
+      <div id="assistantChat" class="list" aria-live="polite" style="min-height:120px;max-height:420px;overflow:auto;margin-bottom:16px">
+        <div class="hcard"><strong>Assistant M2</strong><div>Salut ! Explique-moi comment tu veux présenter tes publications. Je peux préparer un format, un code promo, les emojis et la ligne du lien. Je te montrerai la proposition avant de l’appliquer.</div></div>
+      </div>
+      <div class="field"><label for="assistantInput">Explique la modification souhaitée</label><textarea id="assistantInput" rows="4" maxlength="1200" placeholder="Décris ici les changements que tu souhaites…" style="width:100%;background:#0d1527;color:var(--text);border:1px solid var(--line);padding:12px;border-radius:10px;resize:vertical"></textarea></div>
+      <div class="actions"><button class="btn primary" id="assistantSend">Demander à l’IA</button><button class="btn" id="assistantClear">Nouvelle conversation</button></div>
+      <div id="assistantProposal" class="notice hidden" style="margin-top:16px"><strong>Proposition à vérifier</strong><div id="assistantProposalText" style="white-space:pre-wrap;margin-top:8px"></div><div class="actions"><button class="btn primary" id="assistantApply">Appliquer au bot</button><button class="btn" id="assistantDismiss">Ne pas appliquer</button></div></div>
+      <p class="sub" style="margin-top:14px">Limite de sécurité : l’assistant peut modifier uniquement les paramètres de mise en forme, pas le code ni les réglages de suppression/modération.</p>
+    </div>
+  </section>
+
+  <section class="page" id="settings">
+    <div class="card section">
+      <div class="sectionhead"><h2>Mise en forme des publications</h2><p>Personnalise le format appliqué aux nouvelles publications. Désactivé par défaut : teste d’abord avec une publication non importante.</p></div>
+      <div class="setting"><div><h3>Activer la mise en forme automatique</h3><p>Modifie le texte ou la légende directement sur Telegram. Les autres informations et les liens sont conservés.</p></div><button class="switch" data-setting="formatEnabled" role="switch" aria-label="Activer la mise en forme"></button></div>
+      <div class="formgrid" style="margin-top:18px">
+        <div class="field"><label for="formatTitlePrefix">Début du titre</label><input id="formatTitlePrefix" type="text" maxlength="160" placeholder="Ex. 🛍️ "></div>
+        <div class="field"><label for="formatTitleSuffix">Fin du titre</label><input id="formatTitleSuffix" type="text" maxlength="160" placeholder="Ex. 🤩‼️"></div>
+        <div class="field"><label for="formatPromoCode">Code promo</label><input id="formatPromoCode" type="text" maxlength="60" placeholder="M2REPS"></div>
+        <div class="field"><label for="formatLinkPrefix">Début de ligne du lien</label><input id="formatLinkPrefix" type="text" maxlength="160" placeholder="👉🏼 "></div>
+        <div class="field" style="grid-column:1/-1"><label for="formatCouponTemplate">Ligne du coupon (utilise {code} à l’endroit du code)</label><input id="formatCouponTemplate" type="text" maxlength="160" placeholder="-15% coupon : {code} 🎁"></div>
+      </div>
+      <div class="notice" style="margin-top:16px"><strong>Aperçu</strong><pre id="formatPreview" style="white-space:pre-wrap;font:inherit;margin:8px 0 0">Nom du produit 🤩‼️</pre></div>
+      <div class="actions"><button class="btn primary saveSettings">Enregistrer les modifications</button><button class="btn" id="previewFormat">Actualiser l’aperçu</button></div>
+    </div>
+    <div class="card section">
+      <div class="sectionhead"><h2>Conservation des données</h2><p>Choisis combien de temps conserver l’historique.</p></div>
+      <div class="field"><label for="retentionDays">Durée de conservation</label><select id="retentionDays"><option value="7">7 jours</option><option value="30">30 jours</option><option value="90">90 jours</option></select></div>
+      <div class="setting" style="margin-top:18px"><div><h3>Enregistrer l’historique</h3><p>Conserve les actions de modération.</p></div><button class="switch" data-setting="logHistory" role="switch"></button></div>
+      <div class="setting"><div><h3>Pause automatique en cas d’erreurs</h3><p>Met le bot en pause après plusieurs erreurs rapprochées.</p></div><button class="switch" data-setting="pauseOnErrorBurst" role="switch"></button></div>
+      <div class="actions"><button class="btn primary saveSettings">Enregistrer les modifications</button></div>
+    </div>
+    <div class="card section" id="v6Panel">
+      <div class="sectionhead"><h2>HACOO BOT V6 — contrôle IA</h2><p>Vérifie les fournisseurs API configurés et enregistre des propositions d’amélioration. Les tests API envoient une requête courte et peuvent consommer du quota.</p></div>
+      <div class="actions" style="margin-top:0"><button class="btn" id="v6Refresh">Actualiser l’état V6</button><button class="btn primary" id="v6TestProviders">Tester les API configurées</button></div>
+      <div id="v6Status" class="notice" style="margin-top:14px">Chargement de l’état V6…</div>
+      <div class="v6-autonomy-wrap">
+        <div class="v6-autonomy-heading">
+          <div><h3>IA autonome — centre de pilotage</h3><p>L’IA observe les statistiques agrégées, propose des améliorations et génère des candidats isolés. Le déploiement autonome à faible risque est préparé derrière une allowlist stricte et reste désactivé par défaut.</p></div>
+          <button class="btn primary" id="v6RunAutonomy">Lancer une revue maintenant</button>
+        </div>
+        <div id="v6AutonomyStatus" class="notice" style="margin:12px 0">Chargement du cycle autonome…</div>
+        <div class="card section" id="v6AutonomyWorkspace" style="margin-top:16px;border:1px solid var(--line)">
+          <div class="sectionhead"><h3>Centre de pilotage autonome</h3><p>Une vue centralisée des décisions, diagnostics, conversations et commandes de contrôle. Les actions réellement exécutées sont journalisées; le chat seul ne peut pas modifier le code ni déployer.</p></div>
+          <div class="actions">
+            <button class="btn" id="v6AutonomyRefreshAll">Actualiser tout</button>
+            <button class="btn primary" id="v6AutonomyRepair">Diagnostiquer et réparer les problèmes sûrs</button>
+            <button class="btn danger" id="v6AutonomyPause">Mettre l’autonomie en pause</button>
+            <button class="btn" id="v6AutonomyResume">Reprendre l’autonomie</button>
+            <button class="btn" id="v6AutonomyChatToggle">Désactiver le chat</button>
+          </div>
+          <div id="v6AutonomyControlStatus" class="notice" style="margin:12px 0">Chargement des commandes de pilotage…</div>
+          <div class="v6-autonomy-grid">
+            <div class="v6-info-card"><div class="v6-info-kicker">ÉTAT ACTUEL</div><h4>Diagnostic et activité</h4><p id="v6AutonomyDiagnostics">Chargement des données de fonctionnement.</p><button class="btn" id="v6AutonomyRunDiagnostic">Lancer un diagnostic IA</button></div>
+            <div class="v6-info-card"><div class="v6-info-kicker">DÉCISIONS</div><h4>Pourquoi l’IA agit</h4><p>Chaque cycle, proposition, blocage ou tentative de déploiement apparaît dans le journal avec son horodatage et ses détails disponibles.</p><button class="btn" id="v6AutonomyRefreshDecisions">Actualiser le journal</button></div>
+          </div>
+          <div class="sectionhead" style="margin-top:22px"><h4>Agent de développement autonome</h4><p>Crée une tâche persistante : l’IA lit un module, génère une version candidate, vérifie la syntaxe et les règles statiques. Le déploiement n’est tenté que si l’allowlist, GitHub, les tests et le contrôle runtime sont configurés. La production n’est jamais remplacée par un simple chat.</p></div>
+          <form id="v6EngineeringForm" class="formgrid">
+            <div class="field"><label for="v6EngineeringTarget">Module cible</label><select id="v6EngineeringTarget" required><option value="lib/incident-forecaster.js">lib/incident-forecaster.js</option><option value="lib/adaptive-policy.js">lib/adaptive-policy.js</option><option value="lib/prepublication.js">lib/prepublication.js</option></select></div>
+            <div class="field" style="grid-column:1/-1"><label for="v6EngineeringObjective">Objectif précis</label><textarea id="v6EngineeringObjective" rows="3" maxlength="3000" minlength="20" placeholder="Exemple : améliore la validation des horaires invalides, conserve les exports existants et ajoute un comportement robuste aux dates mal formées." required></textarea></div>
+            <div class="actions" style="grid-column:1/-1"><button class="btn primary" id="v6EngineeringStart" type="submit">Créer et exécuter la tâche IA</button><button class="btn" id="v6EngineeringRefresh" type="button">Actualiser les tâches</button></div>
+          </form>
+          <div id="v6EngineeringStatus" class="notice" style="margin:12px 0">Chargement de l’agent d’ingénierie…</div>
+          <div id="v6EngineeringTasks" class="list"><div class="empty">Aucune tâche de développement.</div></div>
+          <div class="sectionhead" style="margin-top:22px"><h4>Parler à l’IA autonome</h4><p>Demande-lui d’expliquer une décision, d’analyser un incident ou de proposer une amélioration. Une réponse du chat ne vaut pas autorisation de déploiement.</p></div>
+          <div id="v6AutonomyChatHistory" class="list" aria-live="polite" style="max-height:360px;overflow:auto;margin-bottom:12px"><div class="empty">Conversation vide. Pose une question à l’IA.</div></div>
+          <form id="v6AutonomyChatForm" class="formgrid">
+            <div class="field" style="grid-column:1/-1"><label for="v6AutonomyChatInput">Message</label><textarea id="v6AutonomyChatInput" rows="3" maxlength="3000" placeholder="Pourquoi as-tu proposé cette amélioration ? Analyse les erreurs récentes et propose un plan…" required></textarea></div>
+            <div class="actions" style="grid-column:1/-1"><button class="btn primary" id="v6AutonomyChatSend" type="submit">Envoyer à l’IA</button><span class="sub">L’appel utilise le fournisseur IA configuré et peut consommer du quota.</span></div>
+          </form>
+          <div class="sectionhead" style="margin-top:22px"><h4>Journal complet des décisions récentes</h4><p>Les événements les plus récents apparaissent en premier. Les secrets ne doivent jamais être saisis dans le chat.</p></div>
+          <div id="v6AutonomyDecisionLog" class="list"><div class="empty">Chargement du journal…</div></div>
+        </div>
+        <div class="v6-autonomy-grid">
+          <div class="v6-info-card"><div class="v6-info-kicker">01 · Fonctionnement</div><h4>Revue périodique</h4><p>À chaque cycle, l’IA examine les compteurs du bot (file, erreurs, doublons, modération) et prépare une seule proposition prudente.</p><small>Réglages FadeHost : <code>V6_AUTONOMY_ENABLED</code> et <code>V6_AUTONOMY_INTERVAL_MINUTES</code>.</small></div>
+          <div class="v6-info-card"><div class="v6-info-kicker">02 · Limites</div><h4>Plafond et consommation</h4><p>Un plafond quotidien évite les cycles sans fin. Les appels IA peuvent consommer le quota du fournisseur configuré.</p><small>Réglage FadeHost : <code>V6_AUTONOMY_MAX_RUNS_PER_DAY</code>. Valeur par défaut : 4 cycles/jour.</small></div>
+          <div class="v6-info-card"><div class="v6-info-kicker">03 · Fichiers candidats</div><h4>Proposition isolée</h4><p>Si cette option est activée, l’IA peut générer un module candidat séparé. La génération seule ne lance pas le candidat. Si un déploiement protégé est configuré, les tests de pré-déploiement l’exécutent dans une copie temporaire avec un environnement épuré; ce n’est pas un sandbox système.</p><small>Réglage FadeHost : <code>V6_AUTONOMY_GENERATE_CANDIDATES</code>.</small></div>
+          <div class="v6-info-card v6-safety-card"><div class="v6-info-kicker">04 · Niveau 3 protégé</div><h4>Déploiement sûr sur allowlist</h4><p>Seuls des modules auxiliaires explicitement autorisés peuvent passer la porte automatique. Les fichiers critiques, secrets, données, tableau de bord et dépendances sont exclus.</p><small>Le push GitHub ne confirme pas que FadeHost a redémarré. Le mode reste désactivé par défaut; si le contrôle HTTPS runtime échoue, le système tente de repousser la version précédente, puis il faut vérifier le redémarrage FadeHost.</small></div>
+        </div>
+        <div class="v6-subsection"><h4>Fournisseurs IA configurés</h4><p>La présence d’une clé indique qu’elle est configurée, pas que l’API fonctionne. Utilise le test ci-dessous pour vérifier la connexion; ce test peut consommer du quota.</p></div>
+        <div id="v6ProviderRows" class="list"></div>
+      </div>
+      <div class="sectionhead" style="margin-top:24px"><h3>Laboratoire d’amélioration</h3><p>Enregistre une proposition manuelle ou génère un candidat isolé. Les actions de cette zone ne changent pas le code de production.</p></div>
+      <div class="formgrid">
+        <div class="field"><label for="v6ProposalTitle">Titre</label><input id="v6ProposalTitle" type="text" maxlength="120" placeholder="Ex. Mieux récupérer la file après une panne"></div>
+        <div class="field"><label for="v6ProposalBenefit">Bénéfice attendu</label><input id="v6ProposalBenefit" type="text" maxlength="1000" placeholder="Ex. Réduire les tâches bloquées"></div>
+        <div class="field" style="grid-column:1/-1"><label for="v6ProposalRationale">Pourquoi cette amélioration est utile</label><input id="v6ProposalRationale" type="text" maxlength="2000" placeholder="Décris le problème observé et le résultat attendu"></div>
+      </div>
+      <div class="actions"><button class="btn primary" id="v6CreateProposal">Enregistrer la proposition</button></div>
+      <div id="v6ProposalResult" class="sub" style="margin-top:10px"></div>
+      <div class="sectionhead" style="margin-top:24px"><h3>Générer un module candidat</h3><p>Le code généré est sauvegardé dans workspace/candidates, contrôlé syntaxiquement et jamais exécuté ou déployé par ce bouton.</p></div>
+      <div class="actions"><button class="btn primary" id="v6GenerateCandidate">Générer un candidat à partir du titre et du besoin ci-dessus</button><button class="btn" id="v6RefreshCandidates">Actualiser les candidats</button></div>
+      <div id="v6Candidates" class="list"></div>
+      <div class="sectionhead" style="margin-top:24px"><h3>Commandes en langage naturel</h3><p>Les commandes sont limitées à une liste d’actions autorisées. Le système ne lance pas de commandes shell et ne modifie pas les protections à partir d’une demande libre.</p></div>
+      <div class="field"><label for="v6NaturalCommand">Commande</label><input id="v6NaturalCommand" maxlength="160" placeholder="Ex. statut du bot, lancer une revue autonome, vérifier la santé"></div><div class="actions"><button class="btn primary" id="v6RunCommand">Exécuter la commande autorisée</button></div><pre id="v6CommandResult" class="sub" style="white-space:pre-wrap;margin-top:10px"></pre>
+      <div class="sectionhead" style="margin-top:24px"><h3>Optimisation éditoriale</h3><p>L’IA propose une version plus claire. La proposition n’est jamais publiée automatiquement et doit être relue.</p></div>
+      <div class="field"><label for="v6EditorialSource">Texte source</label><textarea id="v6EditorialSource" rows="4" maxlength="3500" placeholder="Colle le texte à améliorer"></textarea></div><div class="actions"><button class="btn primary" id="v6OptimizeEditorial">Proposer une version optimisée</button></div><div class="field" style="margin-top:10px"><label for="v6EditorialProposal">Proposition IA (modifiable)</label><textarea id="v6EditorialProposal" rows="5" maxlength="3900" placeholder="La proposition apparaîtra ici; elle ne sera pas publiée automatiquement"></textarea></div><div id="v6EditorialQuality" class="sub"></div>
+      <div class="sectionhead" style="margin-top:24px"><h3>Publications programmées</h3><p>Le texte passe un contrôle qualité avant programmation. Si le résultat d’un envoi est incertain après une panne, HACOO ne le renvoie pas automatiquement afin d’éviter un doublon.</p></div>
+      <div class="formgrid">
+        <div class="field"><label for="v6ScheduleAt">Date et heure (heure locale)</label><input id="v6ScheduleAt" type="datetime-local"></div>
+        <div class="field"><label for="v6ScheduleChannel">ID du canal (facultatif)</label><input id="v6ScheduleChannel" type="text" placeholder="Canal principal par défaut"></div>
+        <div class="field" style="grid-column:1/-1"><label for="v6ScheduleText">Texte à publier</label><textarea id="v6ScheduleText" rows="4" maxlength="3900" placeholder="Prépare le texte de la publication"></textarea></div>
+      </div>
+      <div class="actions"><button class="btn" id="v6CheckPublication">Vérifier la qualité</button><button class="btn primary" id="v6CreateSchedule">Programmer la publication</button><button class="btn" id="v6RefreshSchedules">Actualiser le planning</button><button class="btn" id="v6DailyReport">Envoyer le rapport quotidien</button></div>
+      <div id="v6QualityResult" class="sub" style="margin-top:10px"></div><div id="v6Schedules" class="list" style="margin-top:12px"></div>
+      <div class="sectionhead" style="margin-top:24px"><h3>Mémoire explicable</h3><p>Conserve uniquement les règles ou préférences explicitement ajoutées par l’administrateur, avec leur justification. N’y colle pas de secrets.</p></div>
+      <div class="formgrid"><div class="field"><label for="v6MemoryCategory">Catégorie</label><input id="v6MemoryCategory" maxlength="40" placeholder="Règle éditoriale"></div><div class="field"><label for="v6MemoryContent">Règle ou préférence</label><input id="v6MemoryContent" maxlength="600" placeholder="Ton de publication souhaité"></div><div class="field" style="grid-column:1/-1"><label for="v6MemoryExplanation">Justification</label><input id="v6MemoryExplanation" maxlength="600" placeholder="Pourquoi cette règle doit être retenue"></div></div>
+      <div class="actions"><button class="btn primary" id="v6SaveMemory">Enregistrer en mémoire</button><button class="btn" id="v6LoadMemory">Afficher la mémoire</button></div><div id="v6MemoryList" class="list"></div>
+      <div class="sectionhead" style="margin-top:24px"><h3>Déploiement protégé FadeHost</h3><p>Le candidat est testé dans une copie temporaire avec un environnement épuré (ce n’est pas une sandbox système), puis poussé sur la branche GitHub configurée. FadeHost ne le déploie que si cette application suit cette branche. Commence par une branche de staging, pas par la production.</p></div>
+      <div class="field"><label for="v6DeployFile">Chemin du candidat (dans workspace/candidates)</label><input id="v6DeployFile" maxlength="240" placeholder="workspace/candidates/nom-du-candidat.js"></div>
+      <div class="formgrid"><div class="field"><label for="v6DeployTarget">Fichier cible dans lib/</label><input id="v6DeployTarget" maxlength="180" placeholder="lib/module-existant.js"></div><div class="field"><label for="v6DeployRisk">Niveau de risque</label><select id="v6DeployRisk"><option value="low">Faible — module non critique</option><option value="medium" selected>Moyen</option><option value="high">Élevé</option></select></div></div>
+      <div class="field"><label><input type="checkbox" id="v6SecurityReview"> Je confirme avoir examiné le candidat et ses risques.</label></div><div class="field"><label><input type="checkbox" id="v6HumanApproval"> J’autorise explicitement ce déploiement (obligatoire pour risque moyen/élevé).</label></div>
+      <div class="actions"><button class="btn" id="v6InspectCandidate">Inspecter le candidat</button><button class="btn" id="v6StageCandidate">Créer une release isolée</button><button class="btn primary" id="v6ActivateCandidate">Tester et pousser vers GitHub/FadeHost</button></div><div class="formgrid" style="margin-top:12px"><div class="field"><label for="v6RollbackId">ID de release à restaurer</label><input id="v6RollbackId" maxlength="80" placeholder="ID renvoyé après le push"></div><div class="field" style="align-self:end"><button class="btn" id="v6RollbackButton">Pousser le rollback</button></div></div><div id="v6DeployStatus" class="sub" style="margin-top:8px"></div><div id="v6DeployResult" class="sub" style="margin-top:10px"></div>
+    </div>
+    <div class="card">
+      <h2>Sauvegarde et restauration</h2><p>Garde une copie de tes réglages et de tes données.</p>
+      <div class="actions"><a class="btn" href="/api/backup" style="text-decoration:none">Télécharger une sauvegarde</a></div>
+      <div class="field" style="margin-top:20px"><label for="restoreFile">Restaurer depuis un fichier de sauvegarde</label><input type="file" id="restoreFile" accept=".json,application/json"></div>
+      <div class="actions"><button class="btn danger" id="restoreButton">Restaurer la sauvegarde</button></div>
+    </div>
+  </section>
+  <footer>M2 HACOO BOT · Tableau de bord privé</footer>
+</main>
+</div>
+<div id="mobileMoreMenu" class="mobile-menu-backdrop" role="dialog" aria-modal="true" aria-labelledby="mobileMenuTitle" aria-hidden="true">
+  <div class="mobile-menu-sheet">
+    <div class="mobile-menu-grabber" aria-hidden="true"></div>
+    <div class="mobile-menu-head"><h2 id="mobileMenuTitle">Tous les outils</h2><button type="button" class="btn" id="closeMobileMenu" aria-label="Fermer le menu">Fermer</button></div>
+    <div class="mobile-menu-grid" id="mobileMenuItems"></div>
+  </div>
+</div>
+<div id="toast" class="toast hidden" role="status"></div>
+<script>
+'use strict';
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+let state=null, settings={}, historyData=[], duplicateData=[], ruleData={};
+let assistantConversation=[], assistantPatch=null, assistantBusy=false;
+let toastTimer;
+const titles={
+ home:['Vue d’ensemble','Tout ce qui se passe sur ton canal, en un coup d’œil.'],
+ duplicates:['Anti-doublons','Choisis comment détecter les publications répétées.'],
+ moderation:['Modération','Définis les contenus qui doivent être bloqués.'],
+ cleaning:['Nettoyage automatique','Nettoie les publications sans supprimer tout le contenu.'],
+ content:['Types de contenu','Choisis les publications que le bot accepte.'],
+ rules:['Règles personnalisées','Gère tes listes sans modifier de code.'],
+ history:['Historique','Consulte les actions effectuées par le bot.'],
+ assistant:['Assistant IA','Explique tes besoins et valide les propositions de mise en forme.'],
+ settings:['Paramètres','Conservation des données et sauvegardes.']
+};
+function toast(message,error=false){
+ const el=$('#toast');el.textContent=message;el.style.borderColor=error?'#a64455':'#405979';el.classList.remove('hidden');
+ clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.add('hidden'),3500);
+}
+function safe(value){
+ return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+async function api(url,options={}){
+ let response;
+ try {
+  response=await fetch(url,{...options,headers:{'Content-Type':'application/json',...(options.headers||{})}});
+ } catch (err) {
+  throw new Error('Impossible de joindre le serveur FadeHost. Vérifie que le service est démarré, puis consulte ses logs.');
+ }
+ const type=response.headers.get('content-type')||'';
+ const body=type.includes('application/json')?await response.json():await response.text();
+ if(!response.ok){
+  if(response.status===429){
+   const retry=Number(response.headers.get('Retry-After')||0);
+   const wait=retry>0?` Réessaie dans ${retry>=60?Math.ceil(retry/60)+' min':retry+' s'}.`:'';
+   throw new Error(String(body?.error||'Trop de requêtes temporairement limitées.')+wait);
+  }
+  if(typeof body==='string' && (body.includes('502: Bad gateway') || body.includes('502 Bad Gateway') || body.includes('cloudflare'))){
+   throw new Error('FadeHost renvoie une erreur 502 : le serveur du bot est inaccessible ou ne répond pas. Ce n’est pas une réponse de Gemini. Vérifie les logs de démarrage sur FadeHost et redémarre le service.');
+  }
+  if(typeof body==='string' && body.trim().startsWith('<')){
+   throw new Error(`Le serveur a renvoyé une page HTML au lieu d’une réponse API (HTTP ${response.status}). Vérifie les logs FadeHost.`);
+  }
+  throw new Error(body?.error||body||`Erreur HTTP ${response.status}`);
+ }
+ return body;
+}
+const mobileMenu=$('#mobileMoreMenu');
+function closeMobileMenu(){mobileMenu.classList.remove('open');mobileMenu.setAttribute('aria-hidden','true');$('#mobileMoreButton').setAttribute('aria-expanded','false');}
+function openMobileMenu(){mobileMenu.classList.add('open');mobileMenu.setAttribute('aria-hidden','false');$('#mobileMoreButton').setAttribute('aria-expanded','true');$('#closeMobileMenu').focus();}
+function buildMobileMenu(){
+ const target=$('#mobileMenuItems');target.innerHTML='';
+ const hiddenPages=$$('#nav button[data-page]').filter(b=>['cleaning','content','rules','assistant','settings'].includes(b.dataset.page));
+ hiddenPages.forEach(source=>{const b=document.createElement('button');b.type='button';b.dataset.page=source.dataset.page;b.innerHTML=source.innerHTML;b.classList.toggle('active',source.classList.contains('active'));target.appendChild(b);});
+ const autonomy=document.createElement('a');autonomy.href='/dashboard/autonomie';autonomy.className='mobile-autonomy-link';autonomy.innerHTML='<i>⚡</i><span><strong>Autonomie V6</strong><small>Diagnostic, tâches et développement</small></span>';target.appendChild(autonomy);
+}
+function showPage(id){
+ if(!titles[id])return;
+ $$('.page').forEach(p=>p.classList.toggle('active',p.id===id));
+ $$('#nav button[data-page]').forEach(b=>{b.classList.toggle('active',b.dataset.page===id);if(b.dataset.page===id)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
+ $$('#mobileMenuItems button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+ $('#pageTitle').textContent=titles[id][0];$('#pageDesc').textContent=titles[id][1];
+ closeMobileMenu();window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+}
+buildMobileMenu();
+$('#nav').addEventListener('click',e=>{
+ const b=e.target.closest('button[data-page]');if(b)showPage(b.dataset.page);
+ if(e.target.closest('#mobileMoreButton'))openMobileMenu();
+});
+$('#mobileMenuItems').addEventListener('click',e=>{const b=e.target.closest('button[data-page]');if(b)showPage(b.dataset.page);});
+$('#closeMobileMenu').addEventListener('click',closeMobileMenu);
+mobileMenu.addEventListener('click',e=>{if(e.target===mobileMenu)closeMobileMenu();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMobileMenu();});
+function renderSwitches(){
+ $$('.switch[data-setting]').forEach(b=>{
+  const key=b.dataset.setting;const on=Boolean(settings[key]);
+  b.classList.toggle('on',on);b.setAttribute('aria-checked',String(on));
+ });
+}
+function renderState(){
+ if(!state)return;
+ settings={...state.settings};
+ renderSwitches();
+ const s=settings.stats||{};
+ $('#mSeen').textContent=Number(s.totalSeen||0).toLocaleString('fr-FR');
+ $('#mDup').textContent=Number(s.duplicates||0).toLocaleString('fr-FR');
+ $('#mDeleted').textContent=Number(s.deleted||0).toLocaleString('fr-FR');
+ $('#mModeration').textContent=Number(s.moderation||0).toLocaleString('fr-FR');
+ $('#mCleaned').textContent=Number(s.cleaned||0).toLocaleString('fr-FR');
+ $('#mErrors').textContent=Number(s.errors||0).toLocaleString('fr-FR');
+ $('#windowMinutes').value=String(settings.windowMinutes||15);
+ $('#duplicateMode').value=settings.duplicateMode||'similar';
+ $('#similarityThreshold').value=Math.round(Number(settings.similarityThreshold||.72)*100);
+ $('#thresholdLabel').textContent=$('#similarityThreshold').value+' %';
+ $('#retentionDays').value=String(settings.retentionDays||30);
+ $('#formatTitlePrefix').value=String(settings.formatTitlePrefix??'🛍️ ');
+ $('#formatTitleSuffix').value=String(settings.formatTitleSuffix??' 🤩‼️');
+ $('#formatPromoCode').value=String(settings.formatPromoCode??'M2REPS');
+ $('#formatLinkPrefix').value=String(settings.formatLinkPrefix??'👉🏼 ');
+ $('#formatCouponTemplate').value=String(settings.formatCouponTemplate??'-15% coupon : {code} 🎁');
+ renderFormatPreview();
+ const runtime=state.runtime||{};
+ const pendingJobs=Number(runtime.pendingJobs||0);
+ const pendingAlbums=Number(runtime.pendingAlbums||0);
+ const failedJobs=Number(runtime.failedJobs||0);
+ $('#queueStatus').textContent = pendingJobs===0 && pendingAlbums===0
+  ? 'Aucune tâche en attente. La file de traitement est vide.'
+  : `${pendingJobs} tâche(s) à traiter, ${pendingAlbums} album(s) en cours de collecte${failedJobs ? `, dont ${failedJobs} tâche(s) ayant atteint la limite de tentatives` : ''}.`;
+ $('#queueStatus').classList.toggle('warn', failedJobs>0);
+ $('#retryPending').disabled = pendingJobs===0 && pendingAlbums===0;
+ const uncertainAlbum=Boolean(runtime.uncertainAlbumSend);
+ $('#uncertainAlbumPanel').classList.toggle('hidden',!uncertainAlbum);
+ const geminiConfigured=Boolean(state.runtime&&state.runtime.geminiConfigured);
+ const geminiModel=String(state.runtime&&state.runtime.geminiModel||'gemini-3.5-flash-lite');
+ $('#geminiStatus').textContent=geminiConfigured
+  ? 'Gemini configuré ('+geminiModel+'). L’IA analyse chaque nouvelle publication et la compare à l’historique récent. En cas de doute ou d’erreur API, la publication est conservée.'
+  : 'Gemini non configuré : ajoute GEMINI_API_KEY dans les variables d’environnement de FadeHost. Les ressemblances incertaines ne seront pas supprimées.';
+ $('#geminiStatus').classList.toggle('warn',!geminiConfigured);
+ const paused=Boolean(settings.botPaused);
+ $('#statusText').textContent=paused?'En pause':settings.enabled?'Actif':'Désactivé';
+ $('#statusDot').style.background=paused?'#ffbd59':settings.enabled?'var(--green)':'var(--red)';
+renderRecent();renderRules();renderHistory();renderPause();renderChart();
+}
+async function load(){
+ try{
+  state=await api('/api/state');renderState();
+  $('#notice').classList.add('hidden');
+ }catch(e){
+  $('#notice').textContent='Impossible de charger le tableau de bord : '+e.message+' Vérifie que le serveur a redémarré et que tu es connecté.';
+  $('#notice').classList.remove('hidden');$('#statusText').textContent='Connexion impossible';$('#statusDot').style.background='var(--red)';
+ }
+}
+$$('.switch[data-setting]').forEach(b=>b.addEventListener('click',()=>{
+ const key=b.dataset.setting;settings[key]=!settings[key];renderSwitches();renderPause();
+ autoSave({[key]:settings[key]});
+}));
+function collectSettings(){
+ const result={};
+ $$('.switch[data-setting]').forEach(b=>result[b.dataset.setting]=Boolean(settings[b.dataset.setting]));
+ result.windowMinutes=Number($('#windowMinutes').value);
+ result.duplicateMode=$('#duplicateMode').value;
+ result.similarityThreshold=Number($('#similarityThreshold').value)/100;
+ result.retentionDays=Number($('#retentionDays').value);
+ result.formatTitlePrefix=$('#formatTitlePrefix').value;
+ result.formatTitleSuffix=$('#formatTitleSuffix').value;
+ result.formatPromoCode=$('#formatPromoCode').value;
+ result.formatLinkPrefix=$('#formatLinkPrefix').value;
+ result.formatCouponTemplate=$('#formatCouponTemplate').value;
+ return result;
+}
+function renderFormatPreview(){
+ const prefix=$('#formatTitlePrefix')?.value??'';
+ const suffix=$('#formatTitleSuffix')?.value??' 🤩‼️';
+ const code=$('#formatPromoCode')?.value??'M2REPS';
+ const coupon=($('#formatCouponTemplate')?.value??'-15% coupon : {code} 🎁').replace(/\{code\}/gi,code);
+ const linkPrefix=$('#formatLinkPrefix')?.value??'👉🏼 ';
+ $('#formatPreview').textContent=`${prefix}Nom du produit${suffix}\n${coupon}\n\n${linkPrefix}https://c.onlyaff.app/EXEMPLE`;
+}
+['formatTitlePrefix','formatTitleSuffix','formatPromoCode','formatLinkPrefix','formatCouponTemplate'].forEach(id=>$('#'+id).addEventListener('input',renderFormatPreview));
+$('#previewFormat').addEventListener('click',renderFormatPreview);
+async function saveSettings(){
+ try{
+  const result=await api('/api/settings',{method:'POST',body:JSON.stringify(collectSettings())});
+  if(!result.ok)throw new Error('Les réglages n’ont pas été confirmés.');
+  toast('Modifications enregistrées.');
+  await load();
+ }catch(e){toast('Enregistrement impossible : '+e.message,true);}
+}
+$$('.saveSettings').forEach(b=>b.addEventListener('click',saveSettings));
+$('#saveHome').addEventListener('click',saveSettings);
+$('#refresh').addEventListener('click',load);
+$('#retryPending').addEventListener('click',async()=>{
+ try{
+  const result=await api('/api/retry-pending',{method:'POST',body:'{}'});
+  toast(`Relance demandée : ${Number(result.queued||0)} tâche(s) remise(s) en file.`);
+  await load();
+ }catch(e){toast('Relance impossible : '+e.message,true);}
+});
+async function resolveUncertainAlbum(action){
+ const warning=action==='confirm_sent'
+  ? 'Confirmer seulement si tu as vérifié dans Telegram que TOUS les morceaux du nouvel album sont déjà publiés. Le bot ne renverra rien et terminera le nettoyage des originaux.'
+  : 'Confirmer seulement si tu as vérifié que le morceau dont l’envoi est incertain n’est PAS publié dans Telegram. Le bot le renverra, ce qui pourrait créer un doublon si la vérification est incorrecte.';
+ if(!window.confirm(warning))return;
+ try{
+  const result=await api('/api/album/resolve',{method:'POST',body:JSON.stringify({action})});
+  toast(result.message||'Résolution enregistrée.');
+  await load();
+ }catch(e){toast('Résolution impossible : '+e.message,true);}
+}
+$('#albumConfirmSent').addEventListener('click',()=>resolveUncertainAlbum('confirm_sent'));
+$('#albumConfirmNotSent').addEventListener('click',()=>resolveUncertainAlbum('confirm_not_sent'));
+$('#similarityThreshold').addEventListener('input',e=>$('#thresholdLabel').textContent=e.target.value+' %');
+function renderRecent(){
+ const rows=(state?.history||[]).slice(0,5);
+ $('#recent').innerHTML=rows.length?rows.map(x=>`<div class="rule"><span><strong>${safe(x.reason||x.action||'Action')}</strong><br><small>${safe(x.text||'Sans texte')}</small></span><span class="sub">${safe(formatDate(x.time))}</span></div>`).join(''):'<div class="empty">Aucune action récente.</div>';
+}
+function formatDate(value){
+ if(!value)return 'Date inconnue';
+ const d=new Date(value);return Number.isNaN(d.getTime())?'Date inconnue':d.toLocaleString('fr-FR');
+}
+function currentList(){return $('#ruleList').value}
+function renderRules(){
+ const list=currentList(),items=state?.rules?.[list]||[];
+ $('#rulesList').innerHTML=items.length?items.map((value,index)=>`<div class="rule"><span>${safe(value)}</span><button class="btn danger removeRule" data-list="${safe(list)}" data-index="${index}">Supprimer</button></div>`).join(''):'<div class="empty">Aucune règle dans cette liste.</div>';
+}
+$('#ruleList').addEventListener('change',renderRules);
+$('#reloadRules').addEventListener('click',load);
+async function ruleAction(body){
+ try{
+  await api('/api/rules',{method:'POST',body:JSON.stringify(body)});
+  await load();toast(body.action==='remove'?'Règle supprimée.':'Règle ajoutée.');
+ }catch(e){toast('Impossible de modifier la règle : '+e.message,true);}
+}
+$('#addRule').addEventListener('click',()=>{
+ const value=$('#ruleValue').value.trim();
+ if(!value){toast('Saisis d’abord une règle.',true);return;}
+ ruleAction({list:currentList(),value}).then(()=>$('#ruleValue').value='');
+});
+$('#ruleValue').addEventListener('keydown',e=>{if(e.key==='Enter')$('#addRule').click()});
+$('#rulesList').addEventListener('click',e=>{
+ const b=e.target.closest('.removeRule');if(!b)return;
+ if(confirm('Supprimer cette règle ?'))ruleAction({list:b.dataset.list,index:Number(b.dataset.index),action:'remove'});
+});
+function renderHistory(){
+ const ACTIONS={deleted:'Supprimée',failed:'Échec',regrouped:'Regroupée'};
+ const filter=$('#historyFilter').value,query=$('#historySearch').value.toLowerCase();
+ const rows=(historyData.length?historyData:(state?.history||[])).filter(x=>{
+  const type=x.action||'unknown';
+  return (filter==='all'||filter===type)&&`${x.reason||''} ${x.text||''} ${x.messageId||''} ${x.error||''} ${x.aiReason||''}`.toLowerCase().includes(query);
+ });
+ $('#historyRows').innerHTML=rows.map(x=>`<div class="hcard"><div class="row"><span class="tag ${safe(x.action)}">${safe(ACTIONS[x.action]||x.action||'Action')}</span><span class="sub">${safe(formatDate(x.time))}</span></div><strong>${safe(x.reason||'Motif non précisé')}</strong><div class="sub">${safe(x.text||'Sans texte')}</div><div class="sub">ID Telegram : ${safe(x.messageId||'—')} · Éléments : ${safe(x.groupCount||1)}</div>${x.error?`<div class="notice warn" style="margin-top:8px">Erreur : ${safe(x.error)}</div>`:''}${x.aiReason?`<div class="sub">Explication IA : ${safe(x.aiReason)}</div>`:''}${x.restoredAt?`<div class="sub">✓ Republée le ${safe(formatDate(x.restoredAt))}</div>`:(x.action==='deleted'&&(x.canRestore||Array.isArray(x.originals)))?`<button class="btn undo" data-id="${safe(x.messageId)}">Republier la sauvegarde</button>`:''}</div>`).join('');
+ $('#historyEmpty').classList.toggle('hidden',rows.length>0);
+ const aiRows=state?.runtime?.aiEvents||[];
+ $('#aiRows').innerHTML=aiRows.length?aiRows.slice(0,50).map(a=>`<div class="hcard"><div class="row"><strong>${safe(a.type||'Événement IA')}</strong><span class="sub">${safe(formatDate(a.time))}</span></div><div>${safe(a.message||'—')}</div>${a.model?`<div class="sub">Modèle : ${safe(a.model)}</div>`:''}${a.nextRetryAt?`<div class="sub">Nouvel essai prévu : ${safe(formatDate(a.nextRetryAt))}</div>`:''}</div>`).join(''):'<div class="empty">Aucun événement IA enregistré.</div>';
+ $('#duplicateRows').innerHTML=duplicateData.length?duplicateData.slice(0,50).map(x=>`<div class="hcard"><div class="row"><span class="tag">${safe(x.type?'Doublon '+x.type:x.reason||'Doublon')}</span><span class="sub">${safe(formatDate(x.time))}</span></div><div class="sub">Original${x.originalTime?' ('+safe(formatDate(x.originalTime))+')':''} :</div><div>${safe(x.originalText||'—')}</div><div class="sub">Doublon :</div><div>${safe(x.duplicateText||'—')}</div><div class="sub">Action : ${safe(ACTIONS[x.action]||x.action||'—')}</div></div>`).join(''):'<div class="empty">Aucun doublon enregistré.</div>';
+}
+$('#historyFilter').addEventListener('change',renderHistory);
+$('#historySearch').addEventListener('input',renderHistory);
+$('#reloadHistory').addEventListener('click',load);
+$('#historyRows').addEventListener('click',async e=>{
+ const b=e.target.closest('.undo');if(!b)return;
+ if(!confirm('Republier le contenu sauvegardé ? Cela créera une nouvelle publication.'))return;
+ try{const r=await api('/api/undo/'+encodeURIComponent(b.dataset.id),{method:'POST',body:'{}'});toast(r.note||'Publication renvoyée.');}
+ catch(err){toast(err.message,true);}
+});
+$('#clearHistory').addEventListener('click',async()=>{
+ if(!confirm('Effacer définitivement l’historique des suppressions et des doublons ?'))return;
+ try{await api('/api/clear-history',{method:'POST',body:'{}'});await load();toast('Historique effacé.');}
+ catch(e){toast(e.message,true);}
+});
+async function load(){
+ try{
+  state=await api('/api/state');
+  historyData=state.history||[];duplicateData=state.duplicates||[];
+  renderState();$('#notice').classList.add('hidden');
+ }catch(e){
+  $('#notice').textContent='Impossible de charger les données : '+e.message;
+  $('#notice').classList.remove('hidden');
+  $('#statusText').textContent='Connexion impossible';
+  $('#statusDot').style.background='var(--red)';
+ }
+}
+$('#restoreButton').addEventListener('click',async()=>{
+ const file=$('#restoreFile').files[0];
+ if(!file){toast('Choisis d’abord un fichier de sauvegarde.',true);return;}
+ if(!confirm('Restaurer cette sauvegarde remplacera les données actuelles. Continuer ?'))return;
+ try{
+  const backup=JSON.parse(await file.text());
+  await api('/api/restore',{method:'POST',body:JSON.stringify({data:backup})});
+  $('#restoreFile').value='';await load();toast('Sauvegarde restaurée.');
+ }catch(e){toast('Restauration impossible : '+e.message,true);}
+});
+function addAssistantBubble(role, text) {
+ const el=document.createElement('div'); el.className='hcard';
+ const head=document.createElement('strong'); head.textContent=role==='user'?'Toi':'Assistant M2';
+ const body=document.createElement('div'); body.style.whiteSpace='pre-wrap'; body.textContent=String(text||'');
+ el.append(head,body); $('#assistantChat').append(el); $('#assistantChat').scrollTop=$('#assistantChat').scrollHeight;
+}
+function setAssistantBusy(busy){assistantBusy=busy;$('#assistantSend').disabled=busy;$('#assistantSend').textContent=busy?'Réflexion…':'Demander à l’IA';}
+$('#assistantSend').addEventListener('click', async()=>{
+ const text=$('#assistantInput').value.trim(); if(!text||assistantBusy)return;
+ assistantConversation.push({role:'user',content:text}); addAssistantBubble('user',text); $('#assistantInput').value=''; setAssistantBusy(true);
+ try{
+  const result=await api('/api/assistant/chat',{method:'POST',body:JSON.stringify({messages:assistantConversation.slice(-8)})});
+  const reply=String(result.reply||'Je n’ai pas de réponse pour le moment.');
+  assistantConversation.push({role:'assistant',content:reply}); addAssistantBubble('assistant',reply);
+  assistantPatch=result.settingsPatch||null;
+  if(assistantPatch){
+   const preview={...settings,...assistantPatch};
+   const coupon=String(preview.formatCouponTemplate||'-15% coupon : {code} 🎁').replace(/\{code\}/gi,String(preview.formatPromoCode||'M2REPS'));
+   const example=`${preview.formatTitlePrefix||''}NOM DU PRODUIT${preview.formatTitleSuffix||''}\n${coupon}\n\n${preview.formatLinkPrefix||''}[lien produit conservé]`;
+   $('#assistantProposalText').textContent=reply+'\n\nAperçu du format proposé :\n'+example;
+   $('#assistantProposal').classList.remove('hidden');
+  } else { $('#assistantProposal').classList.add('hidden'); }
+ }catch(e){addAssistantBubble('assistant','Erreur : '+e.message);toast('Assistant IA indisponible : '+e.message,true);}
+ finally{setAssistantBusy(false);}
+});
+$('#assistantInput').addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='Enter')$('#assistantSend').click();});
+$('#assistantApply').addEventListener('click',async()=>{
+ if(!assistantPatch)return;
+ const btn=$('#assistantApply');btn.disabled=true;
+ try{
+  const result=await api('/api/assistant/apply',{method:'POST',body:JSON.stringify({settingsPatch:assistantPatch})});
+  if(!result.ok)throw new Error('Les réglages ne sont pas confirmés.');
+  assistantPatch=null;$('#assistantProposal').classList.add('hidden');
+  toast('Format appliqué et enregistré.'); await load();
+  addAssistantBubble('assistant','C’est enregistré. Le format est maintenant dans les paramètres du bot. Vérifie qu’il est activé uniquement quand tu es prêt à l’utiliser.');
+ }catch(e){toast('Impossible d’appliquer : '+e.message,true);}finally{btn.disabled=false;}
+});
+$('#assistantDismiss').addEventListener('click',()=>{assistantPatch=null;$('#assistantProposal').classList.add('hidden');});
+$('#assistantClear').addEventListener('click',()=>{assistantConversation=[];assistantPatch=null;$('#assistantChat').innerHTML='';$('#assistantProposal').classList.add('hidden');addAssistantBubble('assistant','Nouvelle conversation. Explique-moi le format que tu veux obtenir.');});
+
+async function loadV6Status(){
+ const box=$('#v6Status'),rows=$('#v6ProviderRows');
+ try{
+  const data=await api('/api/v6/status');
+  box.textContent=`Version ${data.version} · Constitution ${data.constitution} · Laboratoire : ${data.lab.mode} · Revue autonome : ${data.autonomy?.enabled?'active':'indisponible (vérifie les clés API)'} · Déploiement automatique : ${data.controller.automaticProductionDeployment?'activé':'bloqué tant que l’adaptateur FadeHost n’est pas validé'} · Canaux actifs : ${data.channels?.active||0}`;
+  const a=data.autonomy||{};
+  const statusLabels={not_started:'Aucune revue effectuée',paused_by_admin:'En pause par l’administrateur',proposal_created:'Proposition créée',proposal_and_candidate_created:'Proposition + candidat créés',error:'Dernière revue en erreur',disabled:'Désactivée',no_provider_configured:'Aucun fournisseur IA configuré',daily_limit_reached:'Plafond quotidien atteint',interval_not_elapsed:'En attente du prochain créneau',already_running:'Une revue est déjà en cours'};
+  const autonomyParts=[
+   `Activation : ${a.enabled?'active':'inactive'}`,
+   `Fournisseur API : ${a.configuredProviderAvailable?'clé configurée':'aucune clé configurée'}`,
+   `Intervalle : ${a.intervalMinutes||360} min`,
+   `Cycles aujourd’hui : ${a.runsToday||0}/${a.maxRunsPerDay||4}`,
+   `Génération de candidats : ${a.candidateGenerationEnabled?'autorisée':'désactivée'}`,
+   `Dernier résultat : ${statusLabels[a.lastStatus]||a.lastStatus||'pas encore exécuté'}`
+  ];
+  if(a.lastRunAt)autonomyParts.push(`Dernière revue : ${safe(a.lastRunAt)}`);
+  if(a.nextEligibleAt)autonomyParts.push(`Prochaine revue possible : ${safe(a.nextEligibleAt)}`);
+  if(a.lastSummary?.title)autonomyParts.push(`Dernière proposition : ${safe(a.lastSummary.title)}`);
+  if(a.lastSummary?.message)autonomyParts.push(`Détail : ${safe(a.lastSummary.message)}`);
+  try{const release=await api('/api/v6/autonomy/deployment-status');const cfg=release.configured||{};autonomyParts.push(`Déploiement autonome : ${release.enabled?'activé (allowlist limitée)':'désactivé/protégé'}`);autonomyParts.push(`Allowlist : ${(release.allowlist||[]).length} cible(s)`);if(!cfg.githubDeployment)autonomyParts.push('Push GitHub désactivé');}catch(e){autonomyParts.push('État du déploiement autonome indisponible');}
+  $('#v6AutonomyStatus').textContent=autonomyParts.join(' · ');
+  rows.innerHTML=(data.providers||[]).map(p=>`<div class="rule"><span><strong>${safe(p.id)}</strong><br><span class="sub">Modèle : ${safe(p.model)} · Variable : ${safe(p.keyVariable)}</span></span><span class="tag ${p.configured?'':'failed'}">${p.configured?'Clé configurée':'Clé absente'}</span></div>`).join('')||'<div class="empty">Aucun fournisseur.</div>';
+ }catch(e){box.textContent='État V6 indisponible : '+e.message;rows.innerHTML='';}
+}
+
+function renderAutonomyChat(role, text, meta=''){
+ const box=$('#v6AutonomyChatHistory');
+ if(box.querySelector('.empty'))box.innerHTML='';
+ const row=document.createElement('div');row.className='rule';
+ const label=role==='user'?'Vous':'IA autonome';
+ row.innerHTML=`<span style="min-width:0;white-space:pre-wrap;overflow-wrap:anywhere"><strong>${safe(label)}</strong>${meta?`<br><span class="sub">${safe(meta)}</span>`:''}<br>${safe(text)}</span>`;
+ box.appendChild(row);box.scrollTop=box.scrollHeight;
+}
+async function loadAutonomyWorkspace(){
+ try{
+  const [control, decisions]=await Promise.all([api('/api/v6/autonomy/control'),api('/api/v6/autonomy/decisions')]);
+  const s=control.status||{};
+  $('#v6AutonomyControlStatus').textContent=`Autonomie : ${s.paused?'en pause':s.enabled?'active':'indisponible'} · Chat : ${control.chatEnabled?'activé':'désactivé'} · Dernière modification : ${control.updatedAt||'aucune'} · Déploiement sûr : ${s.autonomousDeployment?.enabled?'activé mais limité à l’allowlist':'désactivé/protégé'}`;
+  $('#v6AutonomyPause').disabled=Boolean(s.paused);
+  $('#v6AutonomyResume').disabled=!s.paused;
+  $('#v6AutonomyChatToggle').textContent=control.chatEnabled?'Désactiver le chat':'Réactiver le chat';
+  $('#v6AutonomyDiagnostics').textContent=`État : ${s.lastStatus||'pas encore lancé'} · Cycles aujourd’hui : ${s.runsToday||0}/${s.maxRunsPerDay||4} · Intervalle : ${s.intervalMinutes||360} min · Fournisseur : ${s.configuredProviderAvailable?'configuré':'non configuré'}${s.lastSummary?.title?' · Dernière proposition : '+s.lastSummary.title:''}${s.lastSummary?.message?' · Dernière erreur : '+s.lastSummary.message:''}`;
+  const events=decisions.events||[];
+  $('#v6AutonomyDecisionLog').innerHTML=events.map(e=>`<div class="rule"><span style="min-width:0;overflow-wrap:anywhere"><strong>${safe(e.message||e.type)}</strong><br><span class="sub">${safe(e.time||'')} · ${safe(e.type||'événement')}</span>${e.details&&Object.keys(e.details).length?`<br><span class="sub">${safe(JSON.stringify(e.details).slice(0,700))}</span>`:''}</span><span class="tag">Journal</span></div>`).join('')||'<div class="empty">Aucun événement dans le journal.</div>';
+ }catch(e){$('#v6AutonomyControlStatus').textContent='Impossible de charger le centre de pilotage : '+e.message;}
+}
+async function setAutonomyControl(patch){
+ try{await api('/api/v6/autonomy/control',{method:'POST',body:JSON.stringify(patch)});toast('Commande de pilotage enregistrée.');await loadAutonomyWorkspace();await loadV6Status();}
+ catch(e){toast('Commande refusée : '+e.message,true);}
+}
+$('#v6AutonomyPause').addEventListener('click',()=>setAutonomyControl({paused:true}));
+$('#v6AutonomyResume').addEventListener('click',()=>setAutonomyControl({paused:false}));
+$('#v6AutonomyChatToggle').addEventListener('click',async()=>{try{const c=await api('/api/v6/autonomy/control');await setAutonomyControl({chatEnabled:!c.chatEnabled});}catch(e){toast(e.message,true);}});
+$('#v6AutonomyRefreshAll').addEventListener('click',async()=>{await loadAutonomyWorkspace();await loadV6Status();await loadV6Candidates();});
+$('#v6AutonomyRepair').addEventListener('click',async()=>{const b=$('#v6AutonomyRepair');b.disabled=true;b.textContent='Supervision en cours…';try{const r=await api('/api/v6/autonomy/supervisor/run',{method:'POST',body:'{}'});const summary={status:r.status,findings:r.report?.findings||[],repairs:r.report?.repairs||[],automaticCodeChanges:r.report?.automaticCodeChanges,automaticDeployments:r.report?.automaticDeployments};renderAutonomyChat('assistant',JSON.stringify(summary,null,2),'Rapport du superviseur · réparations locales limitées');toast(r.status==='healthy'?'Contrôle terminé : aucun problème détecté.':'Contrôle terminé : consulte le rapport pour les anomalies.');await loadAutonomyWorkspace();await loadV6Status();}catch(e){toast('Supervision impossible : '+e.message,true);}finally{b.disabled=false;b.textContent='Diagnostiquer et réparer les problèmes sûrs';}});
+$('#v6AutonomyRefreshDecisions').addEventListener('click',loadAutonomyWorkspace);
+$('#v6AutonomyRunDiagnostic').addEventListener('click',async()=>{const b=$('#v6AutonomyRunDiagnostic');b.disabled=true;b.textContent='Diagnostic en cours…';try{const r=await api('/api/v6/autonomy/run',{method:'POST',body:'{}'});renderAutonomyChat('assistant',JSON.stringify({status:r.status,proposal:r.proposal,candidate:r.candidate,candidateError:r.candidateError},null,2),'Résultat du diagnostic · aucune activation automatique garantie');await loadAutonomyWorkspace();await loadV6Status();}catch(e){toast('Diagnostic impossible : '+e.message,true);}finally{b.disabled=false;b.textContent='Lancer un diagnostic IA';}});
+async function loadEngineeringTasks(){
+ try{
+  const [status,data]=await Promise.all([api('/api/v6/engineering/status'),api('/api/v6/engineering/tasks')]);
+  $('#v6EngineeringStatus').textContent=`Agent : ${status.enabled?'activé par configuration':'désactivé'} · File auto : ${status.autoQueueEnabled?'activée':'à configurer'} · Cible auto : ${status.automaticTargetConfigured?'configurée':'manquante'} · Tâches : ${status.taskCount||0} · En cours : ${status.activeTasks||0} · GitHub : ${status.githubConfigured?'configuré':'non configuré'} · Santé runtime : ${status.runtimeHealthConfigured?'configurée':'non configurée'} · Allowlist déploiement : ${(status.deployAllowlist||[]).length} cible(s)`;
+  const tasks=data.tasks||[];
+  $('#v6EngineeringTasks').innerHTML=tasks.map(t=>`<div class="rule"><span style="min-width:0;overflow-wrap:anywhere"><strong>${safe(t.target||'cible inconnue')} · ${safe(t.status||'inconnu')}</strong><br><span class="sub">${safe(t.createdAt||'')} · ${safe(t.objective||'')}</span>${t.result?`<br><span class="sub">${safe(JSON.stringify(t.result).slice(0,900))}</span>`:''}${t.error?`<br><span class="sub">Erreur : ${safe(t.error)}</span>`:''}${t.candidateFile?`<br><span class="sub">Candidat : ${safe(t.candidateFile)} · SHA : ${safe(t.candidateSha256||'')}</span>`:''}</span><span class="actions"><button class="btn" data-engineering-run="${safe(t.id)}" ${['running','deploying','completed_runtime_healthy','deployed_runtime_unconfirmed','rollback_attempted','cancelled'].includes(t.status)?'disabled':''}>${t.status==='queued'?'Exécuter':'Relancer'}</button><button class="btn danger" data-engineering-cancel="${safe(t.id)}" ${['running','deploying','completed_runtime_healthy','deployed_runtime_unconfirmed','rollback_attempted','cancelled'].includes(t.status)?'disabled':''}>Annuler</button></span></div>`).join('')||'<div class="empty">Aucune tâche de développement.</div>';
+  $('#v6EngineeringTasks').querySelectorAll('[data-engineering-run]').forEach(btn=>btn.addEventListener('click',async()=>{btn.disabled=true;try{const r=await api(`/api/v6/engineering/tasks/${encodeURIComponent(btn.dataset.engineeringRun)}/run`,{method:'POST',body:'{}'});renderAutonomyChat('assistant',JSON.stringify(r.task,null,2),'Résultat de tâche d’ingénierie');toast('Tâche terminée : '+r.task.status);}catch(e){toast('Tâche non terminée : '+e.message,true);}finally{await loadEngineeringTasks();await loadAutonomyWorkspace();}}));
+  $('#v6EngineeringTasks').querySelectorAll('[data-engineering-cancel]').forEach(btn=>btn.addEventListener('click',async()=>{btn.disabled=true;try{await api(`/api/v6/engineering/tasks/${encodeURIComponent(btn.dataset.engineeringCancel)}/cancel`,{method:'POST',body:'{}'});toast('Tâche annulée avant déploiement.');}catch(e){toast('Annulation refusée : '+e.message,true);}finally{await loadEngineeringTasks();}}));
+ }catch(e){$('#v6EngineeringStatus').textContent='Agent d’ingénierie indisponible : '+e.message;}
+}
+$('#v6EngineeringRefresh').addEventListener('click',loadEngineeringTasks);
+$('#v6EngineeringForm').addEventListener('submit',async ev=>{ev.preventDefault();const btn=$('#v6EngineeringStart');const objective=$('#v6EngineeringObjective').value.trim(),target=$('#v6EngineeringTarget').value;btn.disabled=true;btn.textContent='Création de la tâche…';try{const created=await api('/api/v6/engineering/tasks',{method:'POST',body:JSON.stringify({objective,target})});$('#v6EngineeringObjective').value='';await loadEngineeringTasks();btn.textContent='Génération et contrôles IA…';const run=await api(`/api/v6/engineering/tasks/${encodeURIComponent(created.task.id)}/run`,{method:'POST',body:'{}'});renderAutonomyChat('assistant',JSON.stringify(run.task,null,2),'Tâche d’ingénierie persistante · résultat vérifiable');toast('Tâche IA : '+run.task.status);await loadEngineeringTasks();await loadAutonomyWorkspace();}catch(e){toast('Tâche IA échouée ou bloquée : '+e.message,true);await loadEngineeringTasks();}finally{btn.disabled=false;btn.textContent='Créer et exécuter la tâche IA';}});
+
+$('#v6AutonomyChatForm').addEventListener('submit',async ev=>{ev.preventDefault();const input=$('#v6AutonomyChatInput'),message=input.value.trim(),btn=$('#v6AutonomyChatSend');if(!message)return;renderAutonomyChat('user',message);input.value='';btn.disabled=true;btn.textContent='Réponse en cours…';try{const r=await api('/api/v6/autonomy/chat',{method:'POST',body:JSON.stringify({message})});renderAutonomyChat('assistant',r.answer,`${r.provider}/${r.model} · ${r.latencyMs||'?'} ms · aucune action de code exécutée`);await loadAutonomyWorkspace();}catch(e){renderAutonomyChat('assistant','Je n’ai pas pu répondre : '+e.message,'Erreur');}finally{btn.disabled=false;btn.textContent='Envoyer à l’IA';}});
+$('#v6Refresh').addEventListener('click',loadV6Status);
+$('#v6RunAutonomy').addEventListener('click',async()=>{
+ const btn=$('#v6RunAutonomy');btn.disabled=true;btn.textContent='Revue en cours…';
+ try{const result=await api('/api/v6/autonomy/run',{method:'POST',body:'{}'});if(!result.ok)throw new Error(result.message||result.status||'Revue non terminée');toast('Revue terminée : proposition enregistrée.');await loadV6Status();}
+ catch(e){toast('Revue autonome impossible : '+e.message,true);await loadV6Status();}
+ finally{btn.disabled=false;btn.textContent='Lancer une revue maintenant';}
+});
+
+$('#v6TestProviders').addEventListener('click',async()=>{
+ const btn=$('#v6TestProviders');btn.disabled=true;btn.textContent='Tests en cours…';
+ try{
+  const result=await api('/api/v6/providers/test',{method:'POST',body:'{}'});
+  const lines=(result.results||[]).map(r=>`${r.id}: ${r.ok?'OK':'Échec ('+r.status+')'}${r.latencyMs?' · '+r.latencyMs+' ms':''}${r.httpStatus?' · HTTP '+r.httpStatus:''}`).join('\n');
+  toast(lines||'Aucune clé API configurée.');
+  $('#v6Status').textContent=lines||'Aucune clé API configurée. Ajoute au moins une clé dans FadeHost si tu souhaites tester un fournisseur.';
+  await loadV6Status();
+loadAutonomyWorkspace();
+ }catch(e){toast('Test API impossible : '+e.message,true);}finally{btn.disabled=false;btn.textContent='Tester les API configurées';}
+});
+async function loadV6Candidates(){try{const result=await api('/api/v6/lab/candidates');const list=$('#v6Candidates');list.innerHTML=(result.candidates||[]).map(c=>`<div class="rule"><span><strong>${safe(c.title)}</strong><br><span class="sub">${safe(c.createdAt)} · ${safe(c.provider||'IA')} · ${c.syntaxValid?'Syntaxe valide':'Syntaxe inconnue'} · Jamais exécuté</span><br><span class="sub">${safe(c.file)}</span></span><span class="tag">À vérifier</span></div>`).join('')||'<div class="empty">Aucun candidat généré.</div>';}catch(e){$('#v6Candidates').textContent='Liste des candidats indisponible : '+e.message;}}
+$('#v6RefreshCandidates').addEventListener('click',loadV6Candidates);
+$('#v6GenerateCandidate').addEventListener('click',async()=>{const btn=$('#v6GenerateCandidate');const title=$('#v6ProposalTitle').value.trim(),requirements=$('#v6ProposalRationale').value.trim();if(!title||requirements.length<20){toast('Renseigne un titre et un besoin détaillé (20 caractères minimum).',true);return;}btn.disabled=true;btn.textContent='Génération et vérification…';try{const result=await api('/api/v6/lab/generate-candidate',{method:'POST',body:JSON.stringify({title,requirements})});toast('Candidat généré et isolé; il n’a pas été exécuté.');await loadV6Candidates();await loadV6Status();}catch(e){toast('Génération impossible : '+e.message,true);}finally{btn.disabled=false;btn.textContent='Générer un candidat à partir du titre et du besoin ci-dessus';}});
+$('#v6CreateProposal').addEventListener('click',async()=>{
+ const title=$('#v6ProposalTitle').value.trim(),rationale=$('#v6ProposalRationale').value.trim(),expectedBenefit=$('#v6ProposalBenefit').value.trim();
+ try{
+  const result=await api('/api/v6/lab/proposals',{method:'POST',body:JSON.stringify({title,rationale,expectedBenefit})});
+  $('#v6ProposalResult').textContent=`Proposition enregistrée : ${result.proposal.id}. Aucun code n’a été modifié.`;
+  $('#v6ProposalTitle').value='';$('#v6ProposalRationale').value='';$('#v6ProposalBenefit').value='';toast('Proposition enregistrée dans le laboratoire V6.');await loadV6Status();
+ }catch(e){$('#v6ProposalResult').textContent=e.message;toast('Proposition non enregistrée : '+e.message,true);}
+});
+async function loadV6Schedules(){try{const result=await api('/api/v6/schedules');const box=$('#v6Schedules');box.innerHTML=(result.schedules||[]).map(x=>`<div class="rule"><span><strong>${safe(x.status)}</strong> · ${safe(x.scheduledAt)}<br><span class="sub">Canal : ${safe(x.targetChannel)} · ${safe(x.preview||'')}</span><br><span class="sub">ID : ${safe(x.id)}${x.lastError?' · '+safe(x.lastError):''}</span></span>${['scheduled','blocked'].includes(x.status)?`<button class="btn danger" data-cancel-schedule="${safe(x.id)}">Annuler</button>`:''}</div>`).join('')||'<div class="empty">Aucune publication programmée.</div>';box.querySelectorAll('[data-cancel-schedule]').forEach(btn=>btn.addEventListener('click',async()=>{try{await api('/api/v6/schedules/'+encodeURIComponent(btn.dataset.cancelSchedule)+'/cancel',{method:'POST',body:'{}'});toast('Publication annulée.');await loadV6Schedules();}catch(e){toast(e.message,true);}}));}catch(e){$('#v6Schedules').textContent='Planning indisponible : '+e.message;}}
+$('#v6RunCommand').addEventListener('click',async()=>{try{const result=await api('/api/v6/command',{method:'POST',body:JSON.stringify({command:$('#v6NaturalCommand').value})});$('#v6CommandResult').textContent=JSON.stringify(result.result,null,2);toast('Commande autorisée exécutée.');}catch(e){$('#v6CommandResult').textContent='Commande refusée : '+e.message;}});
+$('#v6OptimizeEditorial').addEventListener('click',async()=>{const btn=$('#v6OptimizeEditorial');btn.disabled=true;btn.textContent='Analyse éditoriale…';try{const result=await api('/api/v6/editorial/optimize',{method:'POST',body:JSON.stringify({text:$('#v6EditorialSource').value})});$('#v6EditorialProposal').value=result.proposedText;$('#v6EditorialQuality').textContent=`Modèle : ${result.provider}/${result.model}. Contrôle qualité : ${result.quality.ok?'aucun blocage détecté':'bloqué'}${result.quality.errors?.length?' · '+result.quality.errors.join(' '):''}${result.quality.warnings?.length?' · Avertissements : '+result.quality.warnings.join(' '):''}. Publication automatique : non.`;toast('Proposition éditoriale prête à relire.');}catch(e){$('#v6EditorialQuality').textContent='Optimisation impossible : '+e.message;}finally{btn.disabled=false;btn.textContent='Proposer une version optimisée';}});
+$('#v6RefreshSchedules').addEventListener('click',loadV6Schedules);
+$('#v6CheckPublication').addEventListener('click',async()=>{try{const result=await api('/api/v6/publication/check',{method:'POST',body:JSON.stringify({text:$('#v6ScheduleText').value})});$('#v6QualityResult').textContent=(result.ok?'Contrôle réussi. ':'Publication bloquée. ')+(result.errors||[]).join(' ')+(result.warnings?.length?' Avertissements : '+result.warnings.join(' '):'');}catch(e){$('#v6QualityResult').textContent=e.message;}});
+$('#v6CreateSchedule').addEventListener('click',async()=>{try{const local=$('#v6ScheduleAt').value;if(!local)throw new Error('Choisis une date et une heure.');const scheduledAt=new Date(local).toISOString();const body={text:$('#v6ScheduleText').value,scheduledAt,targetChannel:$('#v6ScheduleChannel').value.trim()||undefined};const result=await api('/api/v6/schedules',{method:'POST',body:JSON.stringify(body)});toast('Publication programmée.');$('#v6ScheduleText').value='';await loadV6Schedules();}catch(e){toast('Programmation refusée : '+e.message,true);}});
+$('#v6DailyReport').addEventListener('click',async()=>{try{const result=await api('/api/v6/report/run',{method:'POST',body:'{}'});toast(result.ok?'Rapport envoyé sur Telegram.':'Rapport non envoyé : '+(result.status||'erreur'));}catch(e){toast('Rapport impossible : '+e.message,true);}});
+async function loadV6Memory(){try{const result=await api('/api/v6/memory');$('#v6MemoryList').innerHTML=(result.items||[]).map(x=>`<div class="rule"><span><strong>${safe(x.category)}</strong><br>${safe(x.content)}<br><span class="sub">Justification : ${safe(x.explanation)} · ${safe(x.createdAt)}</span></span></div>`).join('')||'<div class="empty">Aucune mémoire explicable enregistrée.</div>';}catch(e){$('#v6MemoryList').textContent=e.message;}}
+$('#v6LoadMemory').addEventListener('click',loadV6Memory);
+$('#v6SaveMemory').addEventListener('click',async()=>{try{const item={category:$('#v6MemoryCategory').value,content:$('#v6MemoryContent').value,explanation:$('#v6MemoryExplanation').value};await api('/api/v6/memory',{method:'POST',body:JSON.stringify(item)});toast('Mémoire enregistrée avec justification.');$('#v6MemoryContent').value='';$('#v6MemoryExplanation').value='';await loadV6Memory();}catch(e){toast('Mémoire non enregistrée : '+e.message,true);}});
+$('#v6InspectCandidate').addEventListener('click',async()=>{try{const result=await api('/api/v6/deploy/inspect',{method:'POST',body:JSON.stringify({file:$('#v6DeployFile').value.trim()})});$('#v6DeployResult').textContent=`Candidat valide : ${result.sha256} · ${result.bytes} octets · syntaxe et contrôle statique réussis. Aucune activation effectuée.`;}catch(e){$('#v6DeployResult').textContent='Inspection refusée : '+e.message;}});
+$('#v6StageCandidate').addEventListener('click',async()=>{try{const result=await api('/api/v6/deploy/stage',{method:'POST',body:JSON.stringify({file:$('#v6DeployFile').value.trim()})});$('#v6DeployResult').textContent=`Release isolée créée : ${result.release.id}. Production inchangée. Production inchangée. La release est seulement archivée; l’activation exige la procédure de déploiement protégée, les contrôles et une revue humaine.`;toast('Release candidate archivée, non activée.');}catch(e){$('#v6DeployResult').textContent='Release refusée : '+e.message;}});
+async function loadV6DeployStatus(){try{const x=await api('/api/v6/deploy/status');$('#v6DeployStatus').textContent=`Adaptateur : ${x.adapter} · configuration GitHub : ${x.configured?'prête':'incomplète'} · déploiement : ${x.enabled?'activé':'désactivé'} · branche : ${x.branch||'non configurée'}. ${x.note}`;}catch(e){$('#v6DeployStatus').textContent='État du déploiement indisponible : '+e.message;}}
+$('#v6RollbackButton').addEventListener('click',async()=>{const releaseId=$('#v6RollbackId').value.trim();if(!releaseId){toast('Indique l’identifiant de release.',true);return;}if(!confirm('Pousser la restauration du fichier précédent vers GitHub ?'))return;try{const result=await api('/api/v6/deploy/rollback',{method:'POST',body:JSON.stringify({releaseId})});$('#v6DeployResult').textContent=`Rollback poussé : ${result.releaseId} · ${result.target} · branche ${result.branch}. ${result.note}`;toast('Rollback poussé; vérifie FadeHost.');}catch(e){$('#v6DeployResult').textContent='Rollback refusé : '+e.message;toast('Rollback non confirmé : '+e.message,true);}});
+$('#v6ActivateCandidate').addEventListener('click',async()=>{const body={file:$('#v6DeployFile').value.trim(),target:$('#v6DeployTarget').value.trim(),risk:$('#v6DeployRisk').value,securityReviewConfirmed:$('#v6SecurityReview').checked,humanApproved:$('#v6HumanApproval').checked};if(!body.file||!body.target){toast('Indique le candidat et son fichier cible.',true);return;}const btn=$('#v6ActivateCandidate');btn.disabled=true;btn.textContent='Tests et déploiement…';try{const result=await api('/api/v6/deploy/activate',{method:'POST',body:JSON.stringify(body)});$('#v6DeployResult').textContent=`Push GitHub réussi : ${result.commitSha||'commit créé'} · cible ${result.target} · branche ${result.branch}. ${result.note} Sauvegarde de retour arrière : ${result.rollback?.file||'voir workspace/releases'}.`;toast('Push effectué; vérifie l’état runtime dans FadeHost.');}catch(e){$('#v6DeployResult').textContent='Déploiement bloqué ou échoué : '+e.message;toast('Déploiement non confirmé : '+e.message,true);}finally{btn.disabled=false;btn.textContent='Tester et pousser vers GitHub/FadeHost';await loadV6DeployStatus();}});
+loadV6Status();
+loadV6Candidates();
+loadV6Schedules();
+loadV6Memory();
+loadV6DeployStatus();
+loadEngineeringTasks();
+load();
+async function autoSave(patch){
+ try{
+  const r=await api('/api/settings',{method:'POST',body:JSON.stringify(patch)});
+  if(!r.ok)throw new Error('Changement non confirmé.');
+  toast('Enregistré ✓');
+ }catch(e){toast('Échec : '+e.message,true);}
+ await load();
+}
+['windowMinutes','duplicateMode','retentionDays'].forEach(id=>$('#'+id).addEventListener('change',e=>autoSave({[id]:id==='duplicateMode'?e.target.value:Number(e.target.value)})));
+$('#similarityThreshold').addEventListener('change',e=>autoSave({similarityThreshold:Number(e.target.value)/100}));
+function renderPause(){
+ const b=$('#pauseBtn'),paused=Boolean(settings.botPaused),on=Boolean(settings.enabled);
+ b.className='bigpause '+(!on?'off':paused?'go':'stop');
+ b.textContent=!on?'Bot désactivé (active-le dans Contrôle rapide)':paused?'▶ Reprendre le bot':'⏸ Mettre en pause';
+ b.disabled=!on;
+
+}
+$('#pauseBtn').addEventListener('click',()=>autoSave({botPaused:!settings.botPaused}));
+function renderChart(){
+ const d=state?.daily||[],max=Math.max(1,...d.flatMap(x=>[x.deleted,x.duplicates]));
+ $('#chart').innerHTML=d.length?d.map(x=>`<div class="bar" title="${x.deleted} supprimées, ${x.duplicates} doublons"><div class="cols"><i style="height:${Math.round(x.deleted/max*100)}%"></i><i class="b2" style="height:${Math.round(x.duplicates/max*100)}%"></i></div>${safe(x.label)}</div>`).join(''):'<div class="empty">Pas encore de données.</div>';
+}
+setInterval(load,60000);
+</script>
 </body>
 </html>
