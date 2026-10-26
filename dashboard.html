@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M2 HACOO BOT V6.3.1 - Dashboard</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 15px; }
+        h1 { margin: 0; color: #38bdf8; font-size: 24px; }
+        .badge { background: #0284c7; padding: 4px 10px; border-radius: 12px; font-size: 14px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
+        .card { background: #1e293b; border-radius: 8px; padding: 20px; border: 1px solid #334155; }
+        .card h2 { margin-top: 0; font-size: 18px; color: #94a3b8; }
+        .metric { font-size: 32px; font-weight: bold; color: #f1f5f9; margin: 10px 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { text-align: left; padding: 8px; border-bottom: 1px solid #334155; }
+        th { color: #94a3b8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>M2 HACOO BOT Dashboard</h1>
+            <span class="badge" id="version">v6.3.2</span>
+        </header>
+        <div class="grid">
+            <div class="card">
+                <h2>Statut Système</h2>
+                <div class="metric" id="status">En ligne</div>
+            </div>
+            <div class="card">
+                <h2>Tâches Autonomes</h2>
+                <div class="metric" id="task-count">0</div>
+            </div>
+            <div class="card">
+                <h2>Tokens IA Consommés</h2>
+                <div class="metric" id="quota-used">0</div>
+            </div>
+        </div>
+        <div class="card" style="margin-top: 20px;">
+            <h2>File de Développement Autonome</h2>
+            <table>
+                <thead>
+                    <tr><th>ID</th><th>Titre</th><th>Priorité</th><th>Statut</th></tr>
+                </thead>
+                <tbody id="task-table">
+                    <tr><td colspan="4">Aucune tâche enregistrée</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        async function fetchStatus() {
+            try {
+                const res = await fetch('/api/status');
+                const data = await res.json();
+                document.getElementById('version').innerText = 'v' + data.version;
+                document.getElementById('status').innerText = data.status.toUpperCase();
+                document.getElementById('task-count').innerText = data.tasks.length;
+                document.getElementById('quota-used').innerText = (data.quota ? data.quota.usedToday : 0) + ' / ' + (data.quota ? data.quota.dailyBudget : 100000);
+            } catch (e) {
+                document.getElementById('status').innerText = 'OFFLINE';
+            }
+        }
+        fetchStatus();
+        setInterval(fetchStatus, 10000);
+    </script>
+</body>
+</html>
